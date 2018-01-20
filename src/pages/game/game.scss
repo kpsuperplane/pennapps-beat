@@ -91,7 +91,14 @@ page-game {
         width: 95%;
         border-radius : 15px;
         button.submit {
-            text-align: center;
+            width: 100%;
+            background-color: white;
+            img{
+                height: 6rem;
+                width: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
     }
 }
