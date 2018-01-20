@@ -15,23 +15,28 @@
             <strong>Song Title</strong><br/>Song Artist
         </div>
     </div>    
+    <div class="waveform">
+        Waveform and song stuff will eventually go here.
+    </div>  
+    <div class="opponent-lyrics">
+        Lyrics lalalalalalala... 
+    </div>  
     <ion-card class="player-container">
         <ion-card-content>
             <ion-list>
+                <button ion-item>
+                    <div class="song-info">
+                        <img src="https://images.shulcloud.com/719/uploads/Icons/song.png">
+                        <div class="song-info-content" style= 'color: #D056DB'>
+                            <strong>Song Title</strong><br/>Song Artist
+                        </div>
+                    </div>  
+                </button>
+                <button ion-item style="text-align: center">
+                        Lyrics lalalalalalalalalalaaa....
+                </button>
                 <ion-item>
-                    <ion-icon name='musical-notes' item-start style="color: #d03e84"></ion-icon>
-                    Albums
-                    <ion-badge item-end>9</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-icon name='musical-notes' item-start style="color: #d03e84"></ion-icon>
-                    Albums
-                    <ion-badge item-end>9</ion-badge>
-                </ion-item>
-                <ion-item>
-                    <ion-icon name='musical-notes' item-start style="color: #d03e84"></ion-icon>
-                    Albums
-                    <ion-badge item-end>9</ion-badge>
+                    <ion-range  pin="true" [(ngModel)]="time"></ion-range>
                 </ion-item>
                 <button class="submit" ion-item icon-only>
                     <ion-icon name='arrow-up' style="color: #D056DB"></ion-icon>

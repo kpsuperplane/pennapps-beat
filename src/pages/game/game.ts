@@ -19,6 +19,9 @@ export class GamePage {
   qrHidden = true;
   qrVisible = false;
 
+  time: number = 0;
+  
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider) {
     this.user = this.navParams.get('user');
     this.sessionId = this.navParams.get('sessionId');
