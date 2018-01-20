@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const {fetch, search, all} = require('./../modules/search')
+const {get, fetch, search, all} = require('./../modules/search')
 
 router.get('/fetch', function(req, res, next) {
 	res.setHeader('Content-Type', 'application/json');
@@ -12,6 +12,16 @@ router.get('/fetch', function(req, res, next) {
 		res.send(JSON.stringify(e))
 
 	})
+});
+
+router.get('/:id', function(req, res, next) {
+	res.setHeader('Content-Type', 'application/json');
+	get(req.params.id).then(data=>{
+		res.send(JSON.stringify(data));
+	}).catch(e=>{
+		console.error(e);
+		res.send(JSON.stringify(e));
+	});
 });
 
 /* GET music endpoint. */

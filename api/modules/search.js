@@ -5,7 +5,7 @@ const Song = require('./Song');
 const fs = require('fs');
 const searchSpotify = require('./searchSpotify');
 const connectDb = require('./db');
-
+const mongo = require('mongodb');
 function simulateDownload(url, cb){
   let data = fs.readFileSync('../api/test/1775613206_1477279482269_7518.xlrc', 'utf8');
   cb(data);
@@ -125,6 +125,16 @@ module.exports = {
           db.close();
           resolve(results);
         });
+      });
+    });
+  },
+  get: function(id) {
+    return new Promise((resolve) => {
+      connectDb((dbo, db) => {
+        dbo.collection('songs').findOne({_id: new mongo.ObjectID(id)}, function(err, result) {
+	  db.close();
+	  resolve(result);
+	});
       });
     });
   }
