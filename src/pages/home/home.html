@@ -2,8 +2,14 @@
 <ion-content>
   <h1 padding class="animated fadeInLeft">Beat {{key}}</h1>
   <ion-list>
-    <button ion-item class="animated fadeInLeft" (click)="createSession()">Create a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
-    <div><h1>Please create your session name</h1></div>
+    <button ion-item class="animated fadeInLeft" (click)="state(opened)">Create a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
+    <div *ngIf="opened" id="panel">
+      <p>Please enter your session name</p>
+      <ion-item>
+          <ion-input  type="text" id="userInput" [ngModel]="sessionName" (ngModelChange)="sessionName = $event"></ion-input>
+        </ion-item>
+    <div id="continue" align ="right" (click)="createSession()"><button ion-button color="light" outline small>Continue</button></div> 
+    </div>
     <button ion-item class="animated fadeInLeft" (click)="scanCode()">Join a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
   </ion-list>
 

@@ -21,6 +21,11 @@ export class HomePage {
   
   scannedCode: string;
 
+  
+  opened = false;
+
+  sessionName: string = null;
+
   constructor(
     public navCtrl: NavController, 
     public firebaseProvider: FirebaseProvider, 
@@ -28,8 +33,16 @@ export class HomePage {
     public alertCtrl: AlertController) {
   }
 
+  state(){
+    if (this.opened){
+      this.opened=false;
+    } else {
+      this.opened=true;
+    }
+  }
+
   createSession() {
-   /* this.alertCtrl.create({
+    /* this.alertCtrl.create({
       title: 'Please enter a session name',
       inputs: [
         {
@@ -50,10 +63,12 @@ export class HomePage {
           }
         }
       ]
-    }).present();
+    }).present(); 
     */
 
+    console.log(this.sessionName);
     
+
   }
   
   scanCode() {
