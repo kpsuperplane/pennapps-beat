@@ -9,6 +9,23 @@ page-game {
         text-align: center;
         font-family: 'lato';
     }
+    .song-info {
+        border-bottom: 1px solid rgba(white, 0.15);
+        position: relative;
+        padding: 1rem;
+        >img {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            height: 3rem;
+            width: auto;
+        }
+        >.song-info-content {
+            text-align: center;
+            padding: 0.5rem 0;
+            color: #FFF;
+        }
+    }
     .qr-code-container {
         position: fixed;
         top: 0;
