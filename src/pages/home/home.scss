@@ -1,3 +1,28 @@
 page-home {
-
+    ion-content {
+        background: linear-gradient(to bottom left, map-get($colors, primary) 0%, darken(map-get($colors, primary), 20%) 100%);
+        .scroll-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            font-family: 'Lato';
+            font-weight: 300;
+            color: #FFF;
+            font-size: 4rem;
+            padding-bottom: 0 !important;
+        }
+        ion-list .item {
+            &, .item-inner {
+                background: transparent !important;
+                border-color: rgba(white, 0.2) !important;
+            }
+            color: rgba(white, 0.8);
+            &.activated {
+                color: #FFF;
+                background: rgba(white, 0.1) !important;
+            }
+        }
+    }
 }
