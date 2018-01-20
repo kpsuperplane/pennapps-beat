@@ -8,40 +8,44 @@ page-game {
     ion-card{
         text-align: center;
         font-family: 'lato';
+        height: 40%;
     }
     .song-info {
-        border-bottom: 1px solid rgba(white, 0.15);
         position: relative;
-        padding: 1rem;
+        margin-left: auto;
+        margin-right: auto;
         >img {
             position: absolute;
-            top: 2rem;
+            top: 0.5rem;
             left: 1rem;
-            height: 3.5rem;
+            height: 2.5rem;
             width: auto;
         }
         >.song-info-content {
             text-align: center;
-            padding: 0.5rem 0;
+            font-size: 1.4rem;
             color: #FFF;
         }
     }
     .waveform{
         color: white;
         text-align: center;
-        height: 15%;
-        margin-top: 15%;
-        border: white;
-        border-width: 8px;
+        height: 35%;
+        margin: 0%;
+        border-style: solid;
+        border-color: white;
+        border-width: 2px;
+      
     }
     .opponent-lyrics{
         color: white;
         text-align: center;
-        height: 5%;
+        height: 10%;
         font-size: 1.5rem;
-        margin-top: 5%;
-        border: white;
-        border-width: 8px;
+        margin: 2% 0% 5% 0%;
+        border-style: solid;
+        border-color: white;
+        border-width: 2px;
     }
     .qr-code-container {
         position: fixed;
@@ -107,8 +111,11 @@ page-game {
             img{
                 height: 4rem;
                 width: auto;
-                margin-left: auto;
-                margin-right: auto;
+                margin: 0;
+                position: absolute;
+                top: 30%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
         }
     }
