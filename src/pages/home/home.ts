@@ -27,6 +27,7 @@ export class HomePage {
 
   createSession() {
     this.navCtrl.push(GamePage, this.firebaseProvider.createSession());
+    let sessionName: string = prompt("What is the name of the session");
   }
   
   scanCode() {
