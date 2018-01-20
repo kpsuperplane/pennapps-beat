@@ -9,7 +9,9 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 export class GamePage {
 
   user: string = null;
-  session: string = null;
+  session: string = prompt ("Please enter a session name");
+
+
 
   qrHidden = true;
   qrVisible = false;
@@ -18,6 +20,7 @@ export class GamePage {
     this.user = this.navParams.get('user');
     this.session = this.navParams.get('session');
   }
+
 
   showQr() {
     this.qrHidden = false;

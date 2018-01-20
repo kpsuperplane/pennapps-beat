@@ -17,7 +17,6 @@ export class MyApp {
       statusBar.styleBlackTranslucent();
       splashScreen.hide();
     });
-
   
 }
 }

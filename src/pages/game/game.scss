@@ -2,6 +2,13 @@ page-game {
     ion-content {
         background: linear-gradient(to bottom, map-get($colors, primary) 0%, darken(map-get($colors, primary), 20%) 100%);
     }
+    img{
+        width: 50px;
+    }
+    ion-card{
+        text-align: center;
+        font-family: 'lato';
+    }
     .qr-code-container {
         position: fixed;
         top: 0;
