@@ -17,26 +17,28 @@
         </ion-card-content>
     </ion-card>
     <ion-card class="player-container">
-        <ion-list>
-            <button ion-item>
-                <ion-icon name="cart" item-start></ion-icon>
-                 Shopping
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                    <ion-icon name='musical-notes' item-start style="color: #d03e84"></ion-icon>
+                    Albums
+                    <ion-badge item-end>9</ion-badge>
+                </ion-item>
+                <ion-item>
+                    <ion-icon name='musical-notes' item-start style="color: #d03e84"></ion-icon>
+                    Albums
+                    <ion-badge item-end>9</ion-badge>
+                </ion-item>
+                <ion-item>
+                    <ion-icon name='musical-notes' item-start style="color: #d03e84"></ion-icon>
+                    Albums
+                    <ion-badge item-end>9</ion-badge>
+                </ion-item>
+                <button class="submit" ion-item icon-only>
+                    <ion-icon name='arrow-up' style="color: #D056DB"></ion-icon>
                 </button>
-                
-                <button ion-item>
-                  <ion-icon name="medical" item-start></ion-icon>
-                  Hospital
-                </button>
-
-                <button ion-item>
-                  <ion-icon name="cafe" item-start></ion-icon>
-                  Cafe
-                </button>
-                
-                <button ion-item icon-only>
-                    <ion-icon name="cloud-upload"></ion-icon>
-                </button>       
-        </ion-list>
+            </ion-list>
+        </ion-card-content>
     </ion-card>
 </ion-content>
 <div [class]="'qr-code-container' + (qrVisible ? ' visible' : '')  + (qrHidden ? ' hidden' : '')">
