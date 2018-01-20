@@ -5,7 +5,7 @@ const fs = require('fs');
 const searchSpotify = require('./searchSpotify');
 
 function simulateDownload(url, cb){
-  let data = fs.readFileSync('./../test/1775613206_1477279482269_7518.xlrc', 'utf8');
+  let data = fs.readFileSync('../api/test/1775613206_1477279482269_7518.xlrc', 'utf8');
   cb(data);
 }
 
@@ -49,9 +49,14 @@ function parseMetadata(song, artist){
   return metadata;
 }
 
-function deferToSpotify(query){
-  searchSpotify(query).then(analysis=>{
-    
+function deferToSpotify(query, song){
+  return new Promise((resolve, reject)=>{
+    searchSpotify(query).then(analysis=>{
+      resolve(song.addAnalysis(analysis))
+    }).catch(e=>{
+      console.error(e);
+      reject(e);
+    })
   })
 }
 
@@ -64,23 +69,30 @@ function search(query, artist){
   // })
   // .then(({songList}) => {
     // console.log(songList);
+    let songList = [{artists: [{name: 'Alan Walker'}], name: 'Faded', lyric: 'http://example.com'}];
     return new Promise((resolve, reject)=>{
-      let songList = ['', ''];
+      let song = new Song(parseMetadata(songList[0], artist))
       download(songList[0].lyric, data => {
         const blacklist = ['x-trans', 'ti:', 'ar:', 'al:', 'by:', 'offset:']
+        
         const lyrics = data.split('\n').filter(line=>{
           return filter(blacklist, line)
         }).map(line=>{
           return line.trim();
         });
-        let output = [];
+
         for(let line of lyrics){
-          console.log(line)
+          // console.log(line)
           if(line.split(']')[1].length>0)
-            output.push(new Lyric(line));
+            song.lyrics.push(new Lyric(line));
         }
-        // console.log(output);
-        resolve(output);
+
+        deferToSpotify(query+"+"+artist, song).then(updatedSong=>{
+          resolve(updatedSong)
+        }).catch(e=>{
+          reject(e);
+        })
+        // console.log(output)
       });
     })
   // })

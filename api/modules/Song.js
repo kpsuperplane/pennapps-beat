@@ -13,6 +13,10 @@ class Song{
 			throw new Error('Expected lyric of type Lyric, got: '+(typeof lyric));
 		}
 	}
+	addAnalysis(analysis){
+		this.analysis = analysis;
+		return this;
+	}
 }
 
 module.exports = Song;
