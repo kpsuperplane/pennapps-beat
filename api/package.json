@@ -6,14 +6,23 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "big-integer": "^1.6.26",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "dotenv": "^4.0.0",
+    "es6-promise": "^4.2.2",
     "express": "~4.15.2",
+    "isomorphic-fetch": "^2.2.1",
     "jade": "~1.11.0",
+    "mongodb": "^3.0.1",
     "morgan": "~1.8.1",
     "node-fetch": "^1.7.3",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "string": "^3.3.3",
+    "string-similarity": "^1.2.0",
+    "xml-js": "^1.6.2"
   }
 }

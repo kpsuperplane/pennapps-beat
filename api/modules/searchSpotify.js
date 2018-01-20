@@ -50,9 +50,7 @@ function getTrackAnalysis(id, token){
 function searchSpotify(query){
 	return new Promise((resolve, reject)=>{
 		authorize().then(token=>{
-			console.log('token: '+token)
 			_search(query, token).then(songID=>{
-				console.log('Song ID: '+songID)
 				getTrackAnalysis(songID, token).then(analysis=>{
 					resolve(analysis)
 				}).catch(reject)
