@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
+import { QRScanner } from '@ionic-native/qr-scanner';
 @Component({
   templateUrl: 'app.html'
 })
@@ -17,6 +18,7 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
-  }
-}
 
+  
+}
+}
