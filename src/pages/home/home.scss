@@ -11,9 +11,13 @@ page-home {
             font-weight: 300;
             color: #FFF;
             font-size: 4rem;
+            animation-delay: 66ms;
             padding-bottom: 0 !important;
         }
         ion-list .item {
+            &:first-child {
+                animation-delay: 33ms;
+            }
             &, .item-inner {
                 background: transparent !important;
                 border-color: rgba(white, 0.2) !important;
