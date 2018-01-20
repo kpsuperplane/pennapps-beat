@@ -1,0 +1,53 @@
+{
+  "name": "music-api",
+  "version": "0.3.11",
+  "description": "Centralized NodeJS API SDK for xiami, netease, and qq music.",
+  "main": "index.js",
+  "scripts": {
+    "express": "node server.js",
+    "start": "node server.js",
+    "test": "mocha --timeout 15000",
+    "build": "node index.js",
+    "precommit": "prettier --write 'src/**/*.js'"
+  },
+  "keywords": [
+    "API",
+    "SDK",
+    "Music",
+    "Xiami",
+    "Netease",
+    "QQMusic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LIU9293/musicAPI.git"
+  },
+  "author": "Liu Kai - https://github.com/LIU9293",
+  "license": "MIT",
+  "dependencies": {
+    "babel-register": "6.26.0",
+    "big-integer": "1.6.17",
+    "es6-promise": "4.1.1",
+    "isomorphic-fetch": "2.2.1",
+    "querystring": "0.2.0",
+    "string": "3.3.3",
+    "string-similarity": "^1.2.0",
+    "xml-js": "1.4.1"
+  },
+  "devDependencies": {
+    "babel-core": "6.26.0",
+    "babel-preset-env": "1.6.1",
+    "compression": "1.6.2",
+    "cors": "2.8.3",
+    "eslint": "4.10.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-config-prettier": "2.7.0",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-prettier": "2.3.1",
+    "express": "4.14.0",
+    "husky": "0.14.3",
+    "mocha": "4.0.1",
+    "morgan": "1.8.2",
+    "prettier": "1.7.4"
+  }
+}
