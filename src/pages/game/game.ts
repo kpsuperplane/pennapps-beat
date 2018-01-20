@@ -5,6 +5,7 @@ import axios from '../../axios';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { SearchPage } from './search/search';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
+import WaveSurfer from 'wavesurfer.js';
 
 @Component({
   selector: 'page-game',
@@ -31,6 +32,7 @@ export class GamePage {
   time: number = 0;
   
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController) {
     this.user = this.navParams.get('user');
     this.sessionId = this.navParams.get('sessionId');
@@ -40,7 +42,22 @@ export class GamePage {
     axios.get('/music').then(({data}) => {
       this.songs = data;
     });
+
   }
+
+  // ionViewDidLoad(){
+  //   let wavesurfer = WaveSurfer.create({
+  //     container: '#waveform',
+  //     barWidth: 3,
+  //     barHeight: 4,
+  //     height: 200,
+  //     waveColor: 'white',
+  //     progressColor: 'purple',
+  //     scrollParent: true,
+  //   });
+  //   wavesurfer.load('https://ia902606.us.archive.org/35/items/shortpoetry_047_librivox/song_cjrg_teasdale_64kb.mp3');
+  // }
+
 
   renderTrack() {
     const context = this.track.nativeElement;
