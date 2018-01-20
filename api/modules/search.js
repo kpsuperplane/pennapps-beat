@@ -1,9 +1,9 @@
-const musicAPI = require('./musicAPI');
+const musicAPI = require('./../musicAPI');
 const Lyric = require('./Lyric');
 const fs = require('fs');
 
 function simulateDownload(url, cb){
-  let data = fs.readFileSync('./test/1775613206_1477279482269_7518.xlrc', 'utf8');
+  let data = fs.readFileSync('./../test/1775613206_1477279482269_7518.xlrc', 'utf8');
   cb(data);
 }
 
@@ -52,13 +52,16 @@ function search(query, artist){
           // console.log(line);
           // console.log(filter(blacklist, line));
           return filter(blacklist, line)
+        }).map(line=>{
+          return line.trim();
         });
         let output = [];
         for(let line of lyrics){
-          console.log(line);
-          output.push(new Lyric(line));
+          console.log(line)
+          if(line.split(']')[1].length>0)
+            output.push(new Lyric(line));
         }
-        console.log(output);
+        // console.log(output);
         resolve(output);
       });
     })
