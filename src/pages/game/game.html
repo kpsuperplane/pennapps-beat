@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content>
     <div class="song-info">
-        <img src="https://images.shulcloud.com/719/uploads/Icons/song.png">
+        <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
             <strong>Song Title</strong><br/>Song Artist
         </div>
@@ -26,7 +26,7 @@
             <ion-list>
                 <button ion-item (click)="search()">
                     <div class="song-info">
-                        <img src="https://images.shulcloud.com/719/uploads/Icons/song.png">
+                        <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
                         <div class="song-info-content" style= 'color: #444' *ngIf="result === null">
                             <strong>No Song Selected</strong><br/>Click here to search...
                         </div>
@@ -35,12 +35,14 @@
                         </div>
                     </div>  
                 </button>
+                <hr/>
                 <button ion-item style="text-align: center">
                         Lyrics lalalalalalalalalalaaa....
                 </button>
                 <ion-item>
                     <ion-range  pin="true" [(ngModel)]="time"></ion-range>
                 </ion-item>
+                <hr/>
                 <button ion-item class="submit">
                     <img src="https://i.imgur.com/SUtq3kZ.png">
                 </button>
