@@ -9,7 +9,7 @@ var index = require('./routes/index');
 var music = require('./routes/music')
 
 var app = express();
-
+app.use(require('cors')());
 // view engine setup (won't need)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
