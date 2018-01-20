@@ -23,8 +23,8 @@ export class HomePage {
   }
   
   scanCode() {
-    this.barcodeScanner.scan({formats: 'QR_CODE'}).then(barcodeData => {
-      this.scannedCode = barcodeData.text;
+    this.barcodeScanner.scan({formats: 'QR_CODE'}).then(session => {
+      this.navCtrl.push(GamePage, this.firebaseProvider.joinSession(session.text));
     }, (err) => {
         console.log('Error: ', err);
     });
