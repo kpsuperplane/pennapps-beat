@@ -1,8 +1,8 @@
-
 const musicAPI = require('./../musicAPI');
 const Lyric = require('./Lyric');
 const Song = require('./Song');
 const fs = require('fs');
+const findYoutubeID = require('./searchYoutube')
 const searchSpotify = require('./searchSpotify');
 const connectDb = require('./db');
 const mongo = require('mongodb');
@@ -12,21 +12,21 @@ function simulateDownload(url, cb){
 }
 
 function download(url, cb) {
-   var data = "";
+ var data = "";
  var request = require("http").get(url, function(res) {
 
-     res.on('data', function(chunk) {
-       data += chunk;
-     });
+   res.on('data', function(chunk) {
+     data += chunk;
+   });
 
    res.on('end', function() {
-       cb(data);
-     })
-   });
+     cb(data);
+   })
+ });
 
-   request.on('error', function(e) {
-     console.log("Got error: " + e.message);
-   });
+ request.on('error', function(e) {
+   console.log("Got error: " + e.message);
+ });
 }
 
 function filter(blacklist, string){
@@ -62,13 +62,13 @@ function deferToSpotify(query, song){
 }
 
 function fetch(query, artist){
-   return musicAPI.searchSong('xiami', {
-     key: query,
-     limit: 100,
-     page: 1,
-     artist: artist
-   })
-   .then(({songList}) => {
+ return musicAPI.searchSong('xiami', {
+   key: query,
+   limit: 100,
+   page: 1,
+   artist: artist
+ })
+ .then(({songList}) => {
     // console.log(songList);
     //let songList = [{artists: [{name: 'Alan Walker'}], name: 'Faded', lyric: 'http://example.com'}];
     return new Promise((resolve, reject)=>{
@@ -84,19 +84,24 @@ function fetch(query, artist){
 
         for(let line of lyrics){
           if (line.indexOf(']') != -1) {
-          if(line.split(']')[1].length>0)
-            song.lyrics.push(new Lyric(line));
+            if(line.split(']')[1].length>0)
+              song.lyrics.push(new Lyric(line));
           }
         }
 
-        deferToSpotify(query+"+"+artist, song).then(updatedSong=>{
-          connectDb((dbo, db) => {
-            dbo.collection("songs").insertOne(updatedSong, function(err, res) {
-              if (err) throw err;
-              db.close();
-              resolve(updatedSong);
+        deferToSpotify(query+"+"+artist, song).then(analyzedSong=>{
+          console.log(analyzedSong)
+          findYoutubeID(query+" + "+artist, analyzedSong).then(updatedSong=>{
+            connectDb((dbo, db) => {
+              dbo.collection("songs").insertOne(updatedSong, function(err, res) {
+                if (err) throw err;
+                db.close();
+                resolve(updatedSong);
+              });
             });
-          });
+          }).catch(e=>{
+            reject(e);
+          })
         }).catch(e=>{
           reject(e);
         })
@@ -104,7 +109,7 @@ function fetch(query, artist){
       });
     })
   })
-  .catch(err => console.log(err))
+ .catch(err => console.log(err))
 }
 module.exports = {
   fetch: fetch,
@@ -132,9 +137,9 @@ module.exports = {
     return new Promise((resolve) => {
       connectDb((dbo, db) => {
         dbo.collection('songs').findOne({_id: new mongo.ObjectID(id)}, function(err, result) {
-	  db.close();
-	  resolve(result);
-	});
+         db.close();
+         resolve(result);
+       });
       });
     });
   }

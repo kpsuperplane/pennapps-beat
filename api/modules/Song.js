@@ -17,6 +17,9 @@ class Song{
 		this.analysis = analysis;
 		return this;
 	}
+	addId(id){
+		this.youtubeID = id;
+	}
 }
 
 module.exports = Song;
