@@ -85,10 +85,10 @@
     <allow-navigation href="http://10.103.227.26:8101" />
     <allow-navigation href="http://10.103.227.26:8100" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
-    <engine name="ios" spec="4.5.4" />
-    <engine name="android" spec="~7.0.0" />
     <plugin name="phonegap-plugin-barcodescanner" spec="^7.0.2">
         <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
     </plugin>
     <allow-navigation href="http://169.254.13.254:8100" />
+    <engine name="ios" spec="4.5.4" />
+    <engine name="android" spec="~7.0.0" />
 </widget>

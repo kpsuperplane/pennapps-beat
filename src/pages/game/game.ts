@@ -10,6 +10,7 @@ import { LoadingController } from 'ionic-angular/components/loading/loading-cont
   selector: 'page-game',
   templateUrl: 'game.html'
 })
+
 export class GamePage {
 
   @ViewChild('track') track: ElementRef;
@@ -76,5 +77,4 @@ export class GamePage {
         this.qrHidden = true;
       }, 200);
   }
-
 }

@@ -29,7 +29,7 @@ export class HomePage {
   }
 
   createSession() {
-    this.alertCtrl.create({
+   /* this.alertCtrl.create({
       title: 'Please enter a session name',
       inputs: [
         {
@@ -51,6 +51,9 @@ export class HomePage {
         }
       ]
     }).present();
+    */
+
+    
   }
   
   scanCode() {
