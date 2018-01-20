@@ -29,13 +29,9 @@ page-game {
     }
     .leader-board{
         color: white;
-        text-align: left;
+        float: left;
         width: 50%;
-        height: 50%;
-        border-style: solid;
-        border-color: white;
-        border-width: 2px;
-      
+        height: 50%; 
     }
 
     .waveform {
