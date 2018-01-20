@@ -12,12 +12,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { GamePage } from '../pages/game/game';
 import { QRCodeModule } from 'angular2-qrcode';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { SearchPage } from '../pages/game/search/search';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    GamePage
+    GamePage,
+    SearchPage
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
   entryComponents: [
     MyApp,
     HomePage,
-    GamePage
+    GamePage,
+    SearchPage
   ],
   providers: [
     StatusBar,

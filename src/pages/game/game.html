@@ -24,11 +24,14 @@
     <ion-card class="player-container">
         <ion-card-content>
             <ion-list>
-                <button ion-item>
+                <button ion-item (click)="search()">
                     <div class="song-info">
                         <img src="https://images.shulcloud.com/719/uploads/Icons/song.png">
-                        <div class="song-info-content" style= 'color: #D056DB'>
-                            <strong>Song Title</strong><br/>Song Artist
+                        <div class="song-info-content" style= 'color: #444' *ngIf="result === null">
+                            <strong>No Song Selected</strong><br/>Click here to search...
+                        </div>
+                        <div class="song-info-content" style= 'color: #D056DB' *ngIf="result !== null">
+                            <strong>{{result.title}}</strong><br/>{{result.artist}}
                         </div>
                     </div>  
                 </button>
