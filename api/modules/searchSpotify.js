@@ -39,13 +39,16 @@ function getTrackAnalysis(id, token){
 
 }
 
+//returns the song analysis
 function searchSpotify(query){
 	return new Promise((resolve, reject)=>{
 		authorize().then(token=>{
-			_search(query, token).then(result=>{
-				resolve(result);
-			})
-		});
+			_search(query, token).then(songID=>{
+				getTrackAnalysis(songID, token).then(analysis=>{
+					resolve(analysis)
+				}).catch(reject)
+			}).catch(reject)
+		}).catch(reject)
 	})
 }
 
@@ -72,4 +75,4 @@ function authorize(){
 	}) 
 }
 
-module.exports = searchNapster;
+module.exports = searchSpotify;

@@ -2,6 +2,7 @@ const musicAPI = require('./../musicAPI');
 const Lyric = require('./Lyric');
 const Song = require('./Song');
 const fs = require('fs');
+const searchSpotify = require('./searchSpotify');
 
 function simulateDownload(url, cb){
   let data = fs.readFileSync('./../test/1775613206_1477279482269_7518.xlrc', 'utf8');
@@ -46,6 +47,12 @@ function parseMetadata(song, artist){
     metadata.artist = artist;
   }
   return metadata;
+}
+
+function deferToSpotify(query){
+  searchSpotify(query).then(analysis=>{
+    
+  })
 }
 
 function search(query, artist){
