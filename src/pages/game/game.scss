@@ -90,6 +90,17 @@ page-game {
         left: 0;
         width: 95%;
         border-radius : 15px;
+        .track {
+            height: 40px;
+            position: relative;
+            width: 100%;
+        }
+        .loudness {
+            height: 2px;
+            width: 100%;
+            transition: all 33ms;
+            background: map-get($colors, primary);
+        }
         button.submit {
             text-align: center;
         }

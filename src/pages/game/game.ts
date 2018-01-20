@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import axios from '../../axios';
@@ -12,10 +12,13 @@ import { LoadingController } from 'ionic-angular/components/loading/loading-cont
 })
 export class GamePage {
 
+  @ViewChild('track') track: ElementRef;
+
   user: string = null;
   sessionId: string = null;
   sessionName: string = null;
   result = null;
+  secondWidth = 20;
   songs: {title: string, artist: string}[] = [];
   session: {
     name: string;
@@ -39,6 +42,10 @@ export class GamePage {
     });
   }
 
+  renderTrack() {
+    const context = this.track.nativeElement;
+  }
+
   search() {
     const modal = this.modalCtrl.create(SearchPage, {songs: this.songs});
     modal.onDidDismiss(query => {
@@ -47,9 +54,10 @@ export class GamePage {
           content: 'Loading...'
         });
         loading.present();
-        axios.get('/music/' + query).then(({data}) => {
-          this.result = data;
+        axios.get('/music/id/' + query).then(({data}) => {
           loading.dismiss();
+          this.result = data;
+          this.renderTrack();
         });
       }
     });
