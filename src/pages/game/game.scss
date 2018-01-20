@@ -91,6 +91,7 @@ page-game {
     .player-container{
         position: fixed;
         bottom: 0;
+        height: auto;
         left: 0;
         width: calc(100% - 24px);
         overflow: hidden;
@@ -104,6 +105,7 @@ page-game {
             height: 100px;
         }
         .item {
+            padding: 1.75rem;
             padding-left: 0 !important;
             border-style: none !important;
             ion-label {
