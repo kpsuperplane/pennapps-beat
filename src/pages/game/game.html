@@ -1,6 +1,6 @@
 <ion-header no-border>
     <ion-navbar color="dark" transparent>
-        <ion-title>Session name</ion-title>
+        <ion-title>{{session !== null ? session.name : 'Loading...'}}</ion-title>
         <ion-buttons end class="back-button-md">
             <button ion-button icon-only (click)="showQr()">
                 <ion-icon name="qr-scanner"></ion-icon>
@@ -9,13 +9,12 @@
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-card>
-        <ion-card-content>
-            <img src="https://images.shulcloud.com/719/uploads/Icons/song.png">
-                <p>Song title</p>
-                <p>Song Artist</p>
-        </ion-card-content>
-    </ion-card>
+    <div class="song-info">
+        <img src="https://images.shulcloud.com/719/uploads/Icons/song.png">
+        <div class="song-info-content">
+            <strong>Song Title</strong><br/>Song Artist
+        </div>
+    </div>    
     <ion-card class="player-container">
         <ion-card-content>
             <ion-list>

@@ -5,6 +5,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import SiriWave from './siriwave';
+import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
 
 @Component({
@@ -20,14 +21,36 @@ export class HomePage {
   
   scannedCode: string;
 
-  constructor(public navCtrl: NavController, public firebaseProvider: FirebaseProvider, public barcodeScanner: BarcodeScanner) {
-
-
+  constructor(
+    public navCtrl: NavController, 
+    public firebaseProvider: FirebaseProvider, 
+    public barcodeScanner: BarcodeScanner,
+    public alertCtrl: AlertController) {
   }
 
   createSession() {
-    this.navCtrl.push(GamePage, this.firebaseProvider.createSession());
-    let sessionName: string = prompt("What is the name of the session");
+    this.alertCtrl.create({
+      title: 'Please enter a session name',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'Session Name'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Next',
+          handler: data => {
+            this.firebaseProvider.createSession(data.name).then((data) => {
+              this.navCtrl.push(GamePage, data);
+            });
+          }
+        }
+      ]
+    }).present();
   }
   
   scanCode() {

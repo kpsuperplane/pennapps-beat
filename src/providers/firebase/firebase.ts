@@ -26,18 +26,30 @@ export class FirebaseProvider {
   constructor(public http: HttpClient) {
   }
 
-  createSession() { 
+  createSession(name: string) { 
     const sessionRef = this.database.ref('sessions');
     const newSessionRef = sessionRef.push();
-    const newUser = newSessionRef.child('users').push();
-    newUser.set(true);
-    return {session: newSessionRef.key, user: newUser.key};
+    const newUserKey = newSessionRef.child('users').push().key;
+    return new Promise((resolve, reject) => {
+      newSessionRef.set({
+        name,
+        users: {
+          [newUserKey]: true
+        }
+      }).then(() => {
+        resolve({sessionId: newSessionRef.key, user: newUserKey});
+      });
+    });
   }
 
-  joinSession(session: string) {
-    const newUser = this.database.ref('sessions').child(session).child('users').push();
+  getSession(sessionId: string) {
+    return this.database.ref('sessions').child(sessionId);
+  }
+
+  joinSession(sessionId: string) {
+    const newUser = this.database.ref('sessions').child(sessionId).child('users').push();
     newUser.set(true);
-    return {session, user: newUser.key};
+    return {sessionId, user: newUser.key};
   }
 
 }

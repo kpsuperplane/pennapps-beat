@@ -9,19 +9,23 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 export class GamePage {
 
   user: string = null;
-  session: string = prompt ("Please enter a session name");
-  
-  
-
+  sessionId: string = null;
+  sessionName: string = null;
+  session: {
+    name: string;
+    users: {[key: string]: true}[];
+  } | null = null;
 
   qrHidden = true;
   qrVisible = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider) {
     this.user = this.navParams.get('user');
-    this.session = this.navParams.get('session');
+    this.sessionId = this.navParams.get('sessionId');
+    this.firebaseProvider.getSession(this.sessionId).on('value', (snapshot) => {
+      this.session = snapshot.val();
+    });
   }
-
 
   showQr() {
     this.qrHidden = false;
