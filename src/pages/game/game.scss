@@ -27,15 +27,25 @@ page-game {
             color: #FFF;
         }
     }
-    .waveform{
+    .leader-board{
         color: white;
-        text-align: center;
-        height: 35%;
-        margin: 0%;
+        text-align: left;
+        width: 50%;
+        height: 50%;
         border-style: solid;
         border-color: white;
         border-width: 2px;
       
+    }
+
+    .waveform {
+        color: white;
+        text-align: right;
+        width: 50%;
+        height: 50%;
+        border-style: solid;
+        border-color: white;
+        border-width: 2px;
     }
     .opponent-lyrics{
         color: white;

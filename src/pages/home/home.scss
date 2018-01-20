@@ -9,11 +9,9 @@ page-home {
         #panel {
             background-color: #D056DB;
             transition: max-height 0.2s ease-out;
-           /* position: absolute;
-            width: 90%;
-            left:50%;
-            transform: translate(-50%, 50%); */
+
             p{
+                padding-left: 5px;
                 padding-top: 10px;
                 color: #FFF;
                 font-family: 'lato';
