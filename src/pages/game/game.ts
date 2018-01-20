@@ -6,11 +6,13 @@ import { ModalController } from 'ionic-angular/components/modal/modal-controller
 import { SearchPage } from './search/search';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { YoutubeProvider } from '../../providers/youtube/youtube';
+import WaveSurfer from 'wavesurfer.js';
 
 @Component({
   selector: 'page-game',
   templateUrl: 'game.html'
 })
+
 export class GamePage {
 
   @ViewChild('track') track: ElementRef;
@@ -78,6 +80,7 @@ export class GamePage {
     axios.get('/music').then(({data}) => {
       this.songs = data;
     });
+
   }
 
   renderTrack = () => {
@@ -275,5 +278,4 @@ export class GamePage {
         this.qrHidden = true;
       }, 200);
   }
-
 }

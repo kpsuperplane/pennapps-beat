@@ -26,7 +26,9 @@ import { YoutubeProvider } from '../providers/youtube/youtube';
     BrowserModule,
     HttpClientModule,   
     QRCodeModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      scrollPadding: false
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -6,6 +6,26 @@ page-home {
             flex-direction: column;
             justify-content: center;
         }
+        #panel {
+            background-color: #D056DB;
+            transition: max-height 0.2s ease-out;
+           /* position: absolute;
+            width: 90%;
+            left:50%;
+            transform: translate(-50%, 50%); */
+            p{
+                padding-top: 10px;
+                color: #FFF;
+                font-family: 'lato';
+                font-weight: 300;
+                font-size: 1.5rem;
+            }
+            button {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+
+        }
         h1 {
             font-family: 'Lato';
             font-weight: 300;
@@ -29,4 +49,5 @@ page-home {
             }
         }
     }
+    
 }

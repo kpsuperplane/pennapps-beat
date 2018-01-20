@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Content } from 'ionic-angular';
 import { GamePage } from '../game/game';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
@@ -13,6 +13,8 @@ import { AlertController } from 'ionic-angular/components/alert/alert-controller
   templateUrl: 'home.html'
 })
 export class HomePage {
+  
+  @ViewChild(Content) content: Content;
 
   /*@ViewChild('visualizer')
   visualizer:ElementRef;*/
@@ -21,6 +23,11 @@ export class HomePage {
   
   scannedCode: string;
 
+  
+  opened = false;
+
+  sessionName: string = null;
+
   constructor(
     public navCtrl: NavController, 
     public firebaseProvider: FirebaseProvider, 
@@ -28,31 +35,24 @@ export class HomePage {
     public alertCtrl: AlertController) {
   }
 
+  state(){
+    if (this.opened){
+      this.opened=false;
+    } else {
+      this.opened=true;
+    }
+    setTimeout(() => {
+      this.content.resize();
+    }, 50);
+  }
+
   createSession() {
-    this.alertCtrl.create({
-      title: 'Please enter a session name',
-      inputs: [
-        {
-          name: 'name',
-          placeholder: 'Session Name'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        },
-        {
-          text: 'Next',
-          handler: data => {
-            this.firebaseProvider.createSession(data.name).then((data) => {
-              this.navCtrl.push(GamePage, data);
-            });
-          }
-        }
-      ]
-    }).present();
+      this.firebaseProvider.createSession(this.sessionName).then((data) => {
+        this.navCtrl.push(GamePage, data);
+      });
   }
   
+
   scanCode() {
     this.barcodeScanner.scan({formats: 'QR_CODE'}).then(session => {
       this.navCtrl.push(GamePage, this.firebaseProvider.joinSession(session.text));
@@ -71,6 +71,8 @@ export class HomePage {
       frequency: 2.5
     }).start();
   }
+
+
   /*
     let sound;
     
