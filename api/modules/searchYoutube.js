@@ -2,7 +2,7 @@ require('dotenv').config()
 const fetch = require('node-fetch')
 
 
-function serialize(obj){
+function serialize(params){
 	var urlencoded = ''
 	for (var i in params) {
       urlencoded += '&' + i + '=' + params[i] // in the format &[key]=[value]
@@ -20,7 +20,7 @@ function findYoutubeID(query, song){
 			type: 'video',
 			maxResults: 1
 		}
-		fetch(url+serialize).then(res=>{
+		fetch(url+serialize(params)).then(res=>{
 			return res.json()
 		}).then(result=>{
 			console.log('VIDEO ID:'+result.items[0].id.videoId)

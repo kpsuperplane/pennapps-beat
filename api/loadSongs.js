@@ -33,5 +33,6 @@ let index = -1;
 // setInterval(() => {
 	++index;
 	if (index >= items.length) console.log('Done!');
-	else httpGet('http://35.182.242.23:3000/music/fetch?title=' + encodeURIComponent(items[index].song) + '&artist=' + encodeURIComponent(items[index].artist));
+	else httpGet('http://localhost:3000/music/fetch?title=' + encodeURIComponent(items[index].song) + '&artist=' + encodeURIComponent(items[index].artist));
+	// else httpGet('http://35.182.242.23:3000/music/fetch?title=' + encodeURIComponent(items[index].song) + '&artist=' + encodeURIComponent(items[index].artist));
 // }, 10000);
