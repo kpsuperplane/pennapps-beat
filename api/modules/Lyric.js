@@ -18,7 +18,7 @@ class Lyric{
     let sec = smallTime[0];
     let ms = smallTime[1];
     //please let js implicit intcast work (hint: no it didnt)
-    return parseInt(ms)*10 + parseInt(sec)*1000 + parseInt(min)*60*1000;
+    return parseInt(ms) + parseInt(sec)*1000 + parseInt(min)*60*1000;
   }
   // static processTimestamp(line){ (removed)
   //   //assuming line is of the format [min:sec.ms format (missing trailing ])
