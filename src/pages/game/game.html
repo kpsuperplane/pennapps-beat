@@ -37,10 +37,10 @@
                 </button>
                 <hr/>
                 <button ion-item style="text-align: center">
-                        Lyrics lalalalalalalalalalaaa....
+                    {{lyric}}
                 </button>
-                <ion-item>
-                    <ion-range  pin="true" [(ngModel)]="time"></ion-range>
+                <ion-item *ngIf="result !== null">
+                    <canvas class="track" id="track" #track></canvas>
                 </ion-item>
                 <hr/>
                 <button ion-item style = "height: 8vh" class="submit">
