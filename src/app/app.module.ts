@@ -25,7 +25,9 @@ import { SearchPage } from '../pages/game/search/search';
     BrowserModule,
     HttpClientModule,   
     QRCodeModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      scrollPadding: false
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -7,9 +7,12 @@ page-home {
             justify-content: center;
         }
         #panel {
-            padding: 0 18px;
             background-color: #D056DB;
             transition: max-height 0.2s ease-out;
+           /* position: absolute;
+            width: 90%;
+            left:50%;
+            transform: translate(-50%, 50%); */
             p{
                 padding-top: 10px;
                 color: #FFF;
