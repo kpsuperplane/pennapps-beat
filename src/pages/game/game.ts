@@ -10,7 +10,8 @@ export class GamePage {
 
   user: string = null;
   session: string = prompt ("Please enter a session name");
-
+  
+  
 
 
   qrHidden = true;
