@@ -6,25 +6,34 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { FirebaseProvider } from '../providers/firebase/firebase';
+import { HttpClientModule } from '@angular/common/http';
+import { GamePage } from '../pages/game/game';
+import { QRCodeModule } from 'angular2-qrcode';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    GamePage
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,   
+    QRCodeModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    GamePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    FirebaseProvider
   ]
 })
 export class AppModule {}

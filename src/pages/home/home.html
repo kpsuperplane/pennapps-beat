@@ -1,8 +1,8 @@
 <ion-header></ion-header>
-<ion-content class="animated fadeInLeft">
-  <h1 padding>Beat</h1>
+<ion-content>
+  <h1 padding class="animated fadeInLeft">Beat {{key}}</h1>
   <ion-list>
-    <button ion-item>New Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
-    <button ion-item>Join a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
+    <button ion-item class="animated fadeInLeft" (click)="createSession()">Create a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
+    <button ion-item class="animated fadeInLeft">Join a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
   </ion-list>
 </ion-content>

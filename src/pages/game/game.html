@@ -1,0 +1,20 @@
+<ion-header no-border>
+    <ion-navbar color="dark" transparent>
+        <ion-title>Beat</ion-title>
+        <ion-buttons end class="back-button-md">
+            <button ion-button icon-only (click)="showQr()">
+                <ion-icon name="qr-scanner"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    {{user}}
+    {{session}}
+</ion-content>
+<div [class]="'qr-code-container' + (qrVisible ? ' visible' : '')  + (qrHidden ? ' hidden' : '')">
+    <div class="qr-code-container-inner">
+        <qr-code [value]="session" size="512"></qr-code>
+        <button ion-button clear full (click)="hideQr()">Done</button>
+    </div>
+</div>

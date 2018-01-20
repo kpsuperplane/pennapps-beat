@@ -1,0 +1,46 @@
+page-game {
+    ion-content {
+        background: linear-gradient(to bottom, map-get($colors, primary) 0%, darken(map-get($colors, primary), 20%) 100%);
+    }
+    .qr-code-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(black, 0.25);
+        z-index: 1000;
+        transition: opacity 200ms;
+        opacity: 0;
+        height: 100%;
+        .qr-code-container-inner {
+            margin: 3rem;
+            background: #FFF;
+            overflow: hidden;
+            transition: transform 200ms;
+            transform: scale(0.95);
+            border-radius: 5px;
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
+            qr-code {
+                padding: 2rem 2rem 0 2rem;
+                box-sizing: border-box;
+            }
+            qr-code, img {
+                width: 100%;
+                display: block;
+                height: auto;
+            }
+        }
+        &.visible {
+            opacity: 1;
+            .qr-code-container-inner {
+                transform: scale(1);
+            }
+        }
+        &.hidden {
+            display: none;
+        }
+    }
+}
