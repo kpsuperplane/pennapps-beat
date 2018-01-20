@@ -13,13 +13,14 @@ import { GamePage } from '../pages/game/game';
 import { QRCodeModule } from 'angular2-qrcode';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { SearchPage } from '../pages/game/search/search';
+import { YoutubeProvider } from '../providers/youtube/youtube';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     GamePage,
-    SearchPage
+    SearchPage  
   ],
   imports: [
     BrowserModule,
@@ -39,7 +40,8 @@ import { SearchPage } from '../pages/game/search/search';
     BarcodeScanner,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FirebaseProvider
+    FirebaseProvider,
+    YoutubeProvider
   ]
 })
 export class AppModule {}

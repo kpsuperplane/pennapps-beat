@@ -51,7 +51,7 @@ page-game {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        background: rgba(black, 0.25);
+        background: rgba(black, 0.35);
         z-index: 1000;
         transition: opacity 200ms;
         opacity: 0;
@@ -88,12 +88,36 @@ page-game {
         position: fixed;
         bottom: 0;
         left: 0;
-        width: 95%;
+        width: calc(100% - 24px);
+        overflow: hidden;
+        margin: 12px;
         border-radius : 15px;
+        .card-content {
+            padding: 0 !important;
+        }
         .track {
-            height: 40px;
-            position: relative;
             width: 100%;
+            height: 100px;
+        }
+        .item {
+            padding-left: 0 !important;
+            border-style: none !important;
+            ion-label {
+                margin: 0 !important;
+            }
+            .search-record {
+                height: 3rem;
+                width: auto;
+                position: absolute;
+                top: 2.25rem;
+                left: 2rem;
+            }
+            .item-inner {
+                padding-right: 0 !important;
+            }
+        }
+        hr {
+            margin: 0 !important;
         }
         .loudness {
             height: 2px;
@@ -101,9 +125,19 @@ page-game {
             transition: all 33ms;
             background: map-get($colors, primary);
         }
+        #track-item.hidden {
+            height: 0;
+            display: block;
+            overflow: hidden;
+            >canvas {
+                height: 100px;
+            }
+        }
         button.submit {
+            padding: 12px !important;
             width: 100%;
-            background-color: white;
+            text-align: center;
+            color: map-get($colors, primary);
             img{
                 height: 4rem;
                 width: auto;

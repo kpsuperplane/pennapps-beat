@@ -1,13 +1,15 @@
-<ion-header no-border color="primary">
+<ion-header no-border>
     <ion-navbar>
         <ion-title>Search Songs</ion-title>
         <ion-buttons end class="back-button-md">
             <button ion-button (click)="hide(null)" color="danger">Cancel</button>
         </ion-buttons>
     </ion-navbar>
+    <ion-toolbar>
+        <ion-searchbar #input id="input" (ionInput)="searchItems($event)"></ion-searchbar>
+    </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar (ionInput)="searchItems($event)"></ion-searchbar>
     <ion-list>
         <ion-item *ngIf="results.length === 0 && query">No Results</ion-item>
         <button ion-item *ngFor="let result of results" (click)="hide(result._id)">

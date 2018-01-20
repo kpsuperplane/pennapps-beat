@@ -34,7 +34,7 @@ export class FirebaseProvider {
       newSessionRef.set({
         name,
         users: {
-          [newUserKey]: true
+          [newUserKey]: {id: -1, start: -1}
         }
       }).then(() => {
         resolve({sessionId: newSessionRef.key, user: newUserKey});
@@ -48,7 +48,7 @@ export class FirebaseProvider {
 
   joinSession(sessionId: string) {
     const newUser = this.database.ref('sessions').child(sessionId).child('users').push();
-    newUser.set(true);
+    newUser.set({id: -1, start: -1});
     return {sessionId, user: newUser.key};
   }
 

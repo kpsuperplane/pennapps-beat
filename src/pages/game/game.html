@@ -8,7 +8,7 @@
         </ion-buttons>
     </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content no-bounce>
     <div class="song-info">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
@@ -16,6 +16,7 @@
         </div>
     </div>    
     <div class="waveform">
+        <div id="player"></div>
         Waveform and song stuff will eventually go here.
     </div>  
     <div class="opponent-lyrics">
@@ -25,8 +26,8 @@
         <ion-card-content>
             <ion-list>
                 <button ion-item (click)="search()">
-                    <div class="song-info">
-                        <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
+                    <img float-left class="search-record" src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png" />
+                    <div class="song-info" *ngIf="!loadingTrack">
                         <div class="song-info-content" style= 'color: #444' *ngIf="result === null">
                             <strong>No Song Selected</strong><br/>Click here to search...
                         </div>
@@ -34,17 +35,18 @@
                             <strong>{{result.title}}</strong><br/>{{result.artist}}
                         </div>
                     </div>  
+                    <div class="song-info" *ngIf="loadingTrack">
+                        <div class="song-info-content">
+                            <ion-spinner></ion-spinner>
+                        </div>
+                    </div>
                 </button>
-                <hr/>
-                <button ion-item style="text-align: center">
-                    {{lyric}}
-                </button>
-                <ion-item *ngIf="result !== null">
-                    <canvas class="track" id="track" #track></canvas>
+                <ion-item id="track-item" [class]="result === null ? 'hidden' : ''">
+                    <canvas class="track" id="track" #track height="100px" width="100%"></canvas>
                 </ion-item>
-                <hr/>
-                <button ion-item class="submit">
-                    <img src="https://i.imgur.com/SUtq3kZ.png">
+                <hr [hidden]="result === null"/>
+                <button [hidden]="result === null" ion-item icon-only (click)="submit()" class="submit" detail-none>
+                    <ion-icon name="color-wand"></ion-icon>
                 </button>
             </ion-list>
         </ion-card-content>
@@ -52,7 +54,7 @@
 </ion-content>
 <div [class]="'qr-code-container' + (qrVisible ? ' visible' : '')  + (qrHidden ? ' hidden' : '')">
     <div class="qr-code-container-inner">
-        <qr-code [value]="session" size="512"></qr-code>
+        <qr-code [value]="sessionId" size="512"></qr-code>
         <button ion-button clear full (click)="hideQr()">Done</button>
     </div>
 </div>
