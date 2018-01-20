@@ -9,8 +9,28 @@
     </ion-navbar>
 </ion-header>
 <ion-content>
-    {{user}}
-    {{session}}
+    <ion-card class="player-container">
+        <ion-list>
+            <button ion-item>
+                <ion-icon name="cart" item-start></ion-icon>
+                 Shopping
+                </button>
+                
+                <button ion-item>
+                  <ion-icon name="medical" item-start></ion-icon>
+                  Hospital
+                </button>
+
+                <button ion-item>
+                  <ion-icon name="cafe" item-start></ion-icon>
+                  Cafe
+                </button>
+                
+                <button ion-item icon-only>
+                    <ion-icon name="cloud-upload"></ion-icon>
+                </button>       
+        </ion-list>
+    </ion-card>
 </ion-content>
 <div [class]="'qr-code-container' + (qrVisible ? ' visible' : '')  + (qrHidden ? ' hidden' : '')">
     <div class="qr-code-container-inner">
