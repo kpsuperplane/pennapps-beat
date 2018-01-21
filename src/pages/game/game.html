@@ -13,9 +13,7 @@
     <div class="song-info" style="width: 90%; margin-bottom: 3%;">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
-
             <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
-
             <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
 
         </div>
@@ -26,14 +24,11 @@
                 <ion-card-header>
                   <p><strong>Leader Board</strong></p>  
                 </ion-card-header>
-          
                 <ion-list>
                     <ion-item>
                         <ion-icon name="cart"></ion-icon>
-                        Player 1
-                        <span>Score 1</span> 
+                        {{playing !== null && playing !== undefined ? playing.userId : "what the fuck is happening now?"}}
                     </ion-item>
-
                     <ion-item>
                         <ion-icon name="medical"></ion-icon>
                         Player 2

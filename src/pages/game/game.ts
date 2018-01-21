@@ -45,11 +45,11 @@ export class GamePage {
   songs: {title: string, artist: string}[] = [];
   session: {
     name: string;
-    users: {[key: string]: true}[];
+    users: {[key: string]: any}[];
   } | null = null;
   playing: {
     id: string,
-    seconds: number,
+    seconds: number, 
     userId: string,
     timestamp: number,
     key: string,
@@ -188,7 +188,7 @@ export class GamePage {
   }
   commitSeek = () => {
     clearTimeout(this.commitSeekTimeout);
-    this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).set({id: this.cuedId, key: this.queuedKey, start: this.trackTime});
+    this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({id: this.cuedId, key: this.queuedKey, start: this.trackTime});
   }
   search() {
     const modal = this.modalCtrl.create(SearchPage, {songs: this.songs});
@@ -250,13 +250,18 @@ export class GamePage {
     requestAnimationFrame(this.renderTrack);
   }
 
+ 
   submit() {
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
     this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
+      this.playing.userId = this.user;
       this.queuedKey = newKey;
       this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({key: newKey});
     });
+    
   }
+
+ 
 
   trackTouchEnd = (e) => {
     let velocity = this.trackTouchVelocity;
