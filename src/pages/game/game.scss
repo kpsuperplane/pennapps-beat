@@ -10,7 +10,7 @@ page-game {
     ion-card{
         text-align: center;
         font-family: 'lato';
-        background-color: rgba(255,255,255,0.6);
+       // background-color: rgba(255,255,255,0.6);
     }
     .song-info {
         position: relative;
@@ -30,13 +30,13 @@ page-game {
         }
     }
     .top-container{ 
-        display:flex;
+        //display:flex;
         .leader-board{
-            flex: 0;
-            width: 50vw;
+            //flex: 0;
+           // width: 50vw;
             ion-card{
                 border-radius: 10px;
-                background-color:rgba(255,255,255,0.6);
+                background-color:rgba(255,255,255,0.2);
                 margin-right: 0 !important;
                 width: calc(100% - 11px);
             }
@@ -46,13 +46,13 @@ page-game {
                     font-weight: 300;
                     font-size: 18px;
                     margin: auto;
-                    color:$purple;
+                    color: #FFF;
                 }
             }
             ion-list{
                 ion-item{
-                    background-color: rgba(255,255,255,0.6);
-                    color:$purple;
+                    background-color: rgba(255,255,255,0.2);
+                    color: #FFF;
                     font-family: 'lato';
                     font-weight: 300;
                     border-top: 0.5px solid $purple;
@@ -60,10 +60,13 @@ page-game {
             }
         }
         .waveform {
+            position: absolute;
             color: white;
-            width: 50vw;
-            margin: 12px 12px 12px 0;
-            flex: 1;
+            top: 10%;
+            width: 200vw;
+            //width: 50vw;
+           // margin: 12px 12px 12px 0;
+            //flex: 1;
         }
     }
     .opponent-lyrics{
