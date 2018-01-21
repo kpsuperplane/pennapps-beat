@@ -34,9 +34,10 @@ page-game {
     }
     .waveform {
         color: white;
-        width: 50%;
-        height: 40vh;
-        float: right;
+        width: calc(50% + 12px);
+        height: 30vh;
+        position: absolute;
+        top: 44.250px;
     }
     .opponent-lyrics{
         color: white;

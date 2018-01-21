@@ -13,6 +13,7 @@ import { YoutubeProvider } from '../../providers/youtube/youtube';
 })
 
 export class GamePage {
+  canvasRect: any;
   ctx: any;
 
   @ViewChild('track') track: ElementRef;
@@ -37,7 +38,7 @@ export class GamePage {
   sessionId: string = null;
   sessionName: string = null;
   result = null;
-  playingInfo: {} | null = null;
+  playingInfo: any | null = null;
   secondWidth = 30;
   songs: {title: string, artist: string}[] = [];
   session: {
@@ -57,7 +58,7 @@ export class GamePage {
   qrVisible = false;
 
   time: number = 0;
-  
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController, public youtubeProvider: YoutubeProvider) {
     this.navCtrl.swipeBackEnabled = false;
@@ -69,6 +70,7 @@ export class GamePage {
       if (this.playing !== null) {
         axios.get('/music/id/' + this.playing.internal_id).then(({data}) => {
           this.playingInfo = data;
+          this.visualize();
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
@@ -240,7 +242,7 @@ export class GamePage {
     const now = new Date().getTime();
     this.trackTouchVelocity = (e.touches[0].screenX - this.trackTouchPosition)/Math.max(1, (now - this.trackTouchTime)/1000);
     this.trackLeft -= e.touches[0].screenX - this.trackTouchPosition;
-    this.trackTouchPosition = e.touches[0].screenX; 
+    this.trackTouchPosition = e.touches[0].screenX;
     this.trackTouchTime = now;
     requestAnimationFrame(this.renderTrack);
   }
@@ -297,11 +299,156 @@ export class GamePage {
       }, 200);
   }
 
-  renderFrame = () => {
-    const x = 0;
-    const { width, height } = this.canvas.nativeElement.getBoundingClientRect();
-    this.ctx.fillStyle = "#000";
-    this.ctx.clearRect(0, 0, width, height);
+  visualize = () => {
+    this.ctx.strokeStyle = "#FFFFFFAA";
+    const widthTime = 250;
+    let segmentIndex = 0;
+
+
+    function drawLines(ctx, pts) {
+      ctx.moveTo(pts[0], pts[1]);
+      for(let i = 2; i < pts.length - 1; i += 2) ctx.lineTo(pts[i], pts[i+1]);
+    }
+
+    function drawCurve(ctx, ptsa, tension = 0.5, isClosed = false, numOfSegments = 16, showPoints = false) {
+
+      ctx.beginPath();
+
+      drawLines(ctx, getCurvePoints(ptsa, tension, isClosed, numOfSegments));
+      
+      if (showPoints) {
+        ctx.beginPath();
+        for(var i=0;i<ptsa.length-1;i+=2) 
+          ctx.rect(ptsa[i] - 2, ptsa[i+1] - 2, 4, 4);
+      }
+
+      ctx.stroke();
+    }
+
+
+    function getCurvePoints(pts, tension, isClosed, numOfSegments) {
+
+      // use input value if provided, or use a default value	 
+      tension = (typeof tension != 'undefined') ? tension : 0.5;
+      isClosed = isClosed ? isClosed : false;
+      numOfSegments = numOfSegments ? numOfSegments : 16;
+
+      var _pts = [], res = [],	// clone array
+          x, y,			// our x,y coords
+          t1x, t2x, t1y, t2y,	// tension vectors
+          c1, c2, c3, c4,		// cardinal points
+          st, t, i;		// steps based on num. of segments
+
+      // clone array so we don't change the original
+      //
+      _pts = pts.slice(0);
+
+      // The algorithm require a previous and next point to the actual point array.
+      // Check if we will draw closed or open curve.
+      // If closed, copy end points to beginning and first points to end
+      // If open, duplicate first points to befinning, end points to end
+      if (isClosed) {
+        _pts.unshift(pts[pts.length - 1]);
+        _pts.unshift(pts[pts.length - 2]);
+        _pts.unshift(pts[pts.length - 1]);
+        _pts.unshift(pts[pts.length - 2]);
+        _pts.push(pts[0]);
+        _pts.push(pts[1]);
+      }
+      else {
+        _pts.unshift(pts[1]);	//copy 1. point and insert at beginning
+        _pts.unshift(pts[0]);
+        _pts.push(pts[pts.length - 2]);	//copy last point and append
+        _pts.push(pts[pts.length - 1]);
+      }
+
+      // ok, lets start..
+
+      // 1. loop goes through point array
+      // 2. loop goes through each segment between the 2 pts + 1e point before and after
+      for (i=2; i < (_pts.length - 4); i+=2) {
+        for (t=0; t <= numOfSegments; t++) {
+
+          // calc tension vectors
+          t1x = (_pts[i+2] - _pts[i-2]) * tension;
+          t2x = (_pts[i+4] - _pts[i]) * tension;
+
+          t1y = (_pts[i+3] - _pts[i-1]) * tension;
+          t2y = (_pts[i+5] - _pts[i+1]) * tension;
+
+          // calc step
+          st = t / numOfSegments;
+
+          // calc cardinals
+          c1 =   2 * Math.pow(st, 3) 	- 3 * Math.pow(st, 2) + 1; 
+          c2 = -(2 * Math.pow(st, 3)) + 3 * Math.pow(st, 2); 
+          c3 = 	   Math.pow(st, 3)	- 2 * Math.pow(st, 2) + st; 
+          c4 = 	   Math.pow(st, 3)	- 	  Math.pow(st, 2);
+
+          // calc x and y cords with common control vectors
+          x = c1 * _pts[i]	+ c2 * _pts[i+2] + c3 * t1x + c4 * t2x;
+          y = c1 * _pts[i+1]	+ c2 * _pts[i+3] + c3 * t1y + c4 * t2y;
+
+          //store points in array
+          res.push(x);
+          res.push(y);
+
+        }
+      }
+
+      return res;
+    }
+    const renderFrame = () => {
+      this.ctx.clearRect(0, 0, this.canvasRect.width, this.canvasRect.height);
+      const time = this.playing.seconds * 1000 + (new Date().getTime() - this.playing.timestamp);
+      while (segmentIndex < this.playingInfo.analysis.segments.length && this.playingInfo.analysis.segments[segmentIndex].start < time/1000) ++segmentIndex;
+      this.ctx.stroke();
+      this.ctx.beginPath();
+      const points = [];
+      const addPoint = (i) => {
+        if (i < 0) return;
+        const segmentPercentLocation = (1-(time - this.playingInfo.analysis.segments[i].start * 1000)/widthTime);
+        const volume = Math.max(0, Math.min(1, ((this.playingInfo.analysis.segments[i].loudness_start + this.playingInfo.analysis.segments[i].loudness_max)/2 + 30)/40));
+        const x = this.canvasRect.width * segmentPercentLocation;
+        const y = this.canvasRect.height - (this.canvasRect.height * volume);
+        points.push(x);
+        points.push(y);
+      }
+      let i;
+      for (i = segmentIndex; i >= 0 && (time - this.playingInfo.analysis.segments[i].start * 1000) < widthTime; --i) addPoint(i);
+      for (let j = 0; j < 5; j++) addPoint(i - j);
+      drawCurve(this.ctx, points);
+    }
+    setInterval(renderFrame, 16.66);
+    /*const duration = segment.duration * 1000;
+    const nextVolume = Math.max(0, Math.min(1, (this.playingInfo.analysis.segments[this.segmentIndex + 1].loudness_start + 60)/80));
+    const barWidth = this.canvasRect.width/this.segmentVolumes.length;
+    const steps = [];
+    const targetLoops = duration/16.66;
+    let animCache = this.segmentVolumes.slice();
+    for (let i = 0; i < this.segmentVolumes.length - 1; i++) {
+      steps[i] = (animCache[i+1] - animCache[i])/duration;
+      this.segmentVolumes[i] = this.segmentVolumes[i+1];
+    }
+    steps[this.segmentVolumes.length - 1] = (steps[this.segmentVolumes.length - 1] - nextVolume)/duration;
+    this.segmentVolumes[this.segmentVolumes.length - 1] = nextVolume;
+    let loops = 0;
+    const interval = setInterval(() => {
+      this.ctx.clearRect(0, 0, this.canvasRect.width, this.canvasRect.height);
+      for (let i = 0; i < animCache.length; i++) {
+        this.ctx.fillRect(i * barWidth, this.canvasRect.height * animCache[i], barWidth, this.canvasRect.height - this.canvasRect.height * animCache[i]);
+        animCache[i] += steps[i];
+      }
+      ++loops;
+      if (loops >= targetLoops) {
+        clearTimeout(interval);
+      } 
+    }, 16.66);
+    setTimeout(() => { 
+      const time = this.playing.seconds * 1000 + (new Date().getTime() - this.playing.timestamp);
+      while (this.segmentIndex < this.playingInfo.analysis.segments.length && this.playingInfo.analysis.segments[this.segmentIndex].start < time/1000) ++this.segmentIndex;
+      requestAnimationFrame(this.renderFrame);
+    }, segment.duration * 1000);*/
     //console.log(this.playingInfo);
     /*for (var i = 0; i < 1000; i++) {
       const barHeight = dataArray[i];
@@ -310,14 +457,12 @@ export class GamePage {
     }*/
   }
 
-  
+
   ionViewDidLoad() {
     var canvas = this.canvas.nativeElement;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
+    canvas.width = this.canvasRect.width;;
+    canvas.height = this.canvasRect.height;
     this.ctx = canvas.getContext("2d");
-    setInterval(() => {
-      requestAnimationFrame(this.renderFrame)
-    }, 16.66);
   }
 }
