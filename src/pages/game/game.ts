@@ -355,6 +355,7 @@ export class GamePage {
     const widthTime = 250;
     let segmentIndex = 0;
 
+    const current = this.playingInfo.__id;
 
     function drawLines(ctx, pts) {
       ctx.moveTo(pts[0], pts[1]);
@@ -449,8 +450,13 @@ export class GamePage {
 
       return res;
     }
+    let interval;
     const { width, height } = this.lyrics.nativeElement.getBoundingClientRect();
     const renderFrame = () => {
+      if (this.playingInfo._id != current) {
+        clearInterval(interval);
+        return;
+      }
       this.ctx.clearRect(0, 0, this.canvasRect.width, this.canvasRect.height);
       const time = this.playing.seconds * 1000 + (new Date().getTime() - this.playing.timestamp);
       while (segmentIndex < this.playingInfo.analysis.segments.length && this.playingInfo.analysis.segments[segmentIndex].start < time/1000) ++segmentIndex;
@@ -520,7 +526,7 @@ export class GamePage {
       }
 
     }
-    setInterval(renderFrame, 16.66);
+    interval = setInterval(renderFrame, 16.66);
   }
 
 
