@@ -3,12 +3,12 @@
   <h1 padding class="animated fadeInLeft">Beat {{key}}</h1>
   <ion-list>
     <button ion-item class="animated fadeInLeft" (click)="state(opened)">Create a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
-    <div *ngIf="opened" id="panel">
-      <p>Please enter your session name</p>
+    <div [hidden]="!opened" id="panel">
+        <form (ngSubmit)="createSession()">
       <ion-item>
-          <ion-input  type="text" id="userInput" [ngModel]="sessionName" (ngModelChange)="sessionName = $event"></ion-input>
-        </ion-item>
-    <div id="continue" align ="right" (click)="createSession()"><button ion-button color="light" outline small>Continue</button></div> 
+        <ion-input placeholder="Enter session name..." name="input" type="text" #userInput id="userInput" [(ngModel)]="sessionName"></ion-input>
+      </ion-item></form>
+      <div id="continue"><button (click)="createSession()" ion-button color="primary" outline small>Continue</button></div> 
     </div>
     <button ion-item class="animated fadeInLeft" (click)="scanCode()">Join a Session <ion-icon name="ios-arrow-forward" float-right></ion-icon></button>
   </ion-list>

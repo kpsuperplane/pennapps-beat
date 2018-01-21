@@ -31,10 +31,12 @@ page-game {
     .top-container{ 
         display:flex;
         .leader-board{
-            flex: 1 0 50%;
+            flex: 0;
 
             ion-card{
-                background-color: $purple;
+                background-color: #FFF;
+                margin-right: 0 !important;
+                width: calc(100% - 12px);
             }
             ion-card-header{                
                 p{
@@ -42,16 +44,16 @@ page-game {
                     font-weight: 300;
                     font-size: 18px;
                     margin: auto;
-                    color: #FFF;
+                    color:$purple;
                 }
             }
             ion-list{
                 ion-item{
-                    background:$purple;
-                    color: #FFF;
+                    background:#FFF;
+                    color:$purple;
                     font-family: 'lato';
                     font-weight: 300;
-                    border-top: 0.5px solid #FFF;
+                    border-top: 0.5px solid $purple;
                 }
             }
         }
@@ -59,15 +61,19 @@ page-game {
             color: white;
             margin: 12px 12px 12px 0;
             height: 100%;
-            flex: 1 0 50%;
+            flex: 1;
         }
     }
     .opponent-lyrics{
         color: white;
         text-align: center;
-        height: 10%;
+        height: 10vh;
         font-size: 1.5rem;
-        margin: 2% 0% 5% 0%;
+        margin: 0;
+        >canvas {
+            height: 10vh;
+            width: 100vw;
+        }
     }
     
     .qr-code-container {
