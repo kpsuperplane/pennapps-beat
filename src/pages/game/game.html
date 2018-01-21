@@ -16,8 +16,8 @@
     <div class="song-info" style="width: 90%; margin-bottom: 3%;">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
-            <strong>{{result.title}}}</strong>
-            <br/>Song Artist
+            <strong>{{playingInfo !== null ? playingInfo.title : ' '}}</strong>
+            <br/>{{playingInfo !== null ? playingInfo.artist : ' '}}
         </div>
     </div>
     <div class="top-container">

@@ -36,6 +36,7 @@ export class GamePage {
   sessionId: string = null;
   sessionName: string = null;
   result = null;
+  playingInfo = null;
   secondWidth = 30;
   songs: {title: string, artist: string}[] = [];
   session: {
@@ -64,6 +65,9 @@ export class GamePage {
     this.firebaseProvider.getSession(this.sessionId).child('playing').on('value', (snapshot) => {
       this.playing = snapshot.val();
       if (this.playing !== null) {
+        axios.get('/music/id/' + this.playing.internal_id).then(({data}) => {
+          this.playingInfo = data;
+        });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
     });
