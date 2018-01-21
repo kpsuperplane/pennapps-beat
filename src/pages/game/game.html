@@ -3,6 +3,10 @@
     <ion-navbar color="dark" transparent>
         <ion-title>{{session !== null ? session.name : 'Loading...'}}</ion-title>
         <ion-buttons end class="back-button-md">
+            <button ion-button icon-only (click)="mute()">
+                <ion-icon *ngIf="!muted" name="volume-up"></ion-icon>
+                <ion-icon *ngIf="muted" name="volume-off"></ion-icon>
+            </button> &nbsp;&nbsp;
             <button ion-button icon-only (click)="showQr()">
                 <ion-icon name="qr-scanner"></ion-icon>
             </button>

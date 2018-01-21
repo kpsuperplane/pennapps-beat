@@ -27,7 +27,7 @@ export class GamePage {
   trackTouchTime = -1;
   trackLyrics = [];
   trackTouchVelocity = 0;
-  trackFont="1.5rem Lato";
+  trackFont="15px Lato";
   trackTime: number = 0;
   cuedId: string = "";
   muted: boolean = true;
@@ -487,7 +487,7 @@ export class GamePage {
     const renderFrame = () => {
       if (this.playingInfo._id !== current) {
         clearInterval(interval);
-        return;
+        return; 
       }
       this.ctx.clearRect(0, 0, this.canvasRect.width, this.canvasRect.height);
       const time = this.playing.seconds * 1000 + (new Date().getTime() - this.playing.timestamp);

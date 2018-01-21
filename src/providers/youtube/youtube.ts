@@ -22,14 +22,17 @@ export class YoutubeProvider {
   start: number = 0;
   muted: boolean = true;
   constructor(public http: HttpClient) {
-    setInterval(this.syncDaemon, 1500);
+    setInterval(this.syncDaemon, 2000);
   }
 
   syncDaemon = () => {
+    if (this.currentlyPlaying !== null && this.currentlyPlaying.getPlayerState() !== 2 && this.currentlyPlaying.getPlayerState() !== 1) this.currentlyPlaying.playVideo();
     if (this.currentlyPlaying !== null && typeof this.currentlyPlaying.getCurrentTime === 'function') {
-      const diff = ((new Date().getTime() - this.start) - this.currentlyPlaying.getCurrentTime() * 1000);
-      if (diff > 50) this.currentlyPlaying.seekTo(this.currentlyPlaying.getCurrentTime() + diff/1300 + 0.1);
-      else if (diff < -50) this.currentlyPlaying.seekTo(this.currentlyPlaying.getCurrentTime() + (diff/1300));
+      const currentTime = this.currentlyPlaying.getCurrentTime();
+      const diff = ((new Date().getTime() - this.start) - currentTime * 1000);
+      console.log(diff);
+      if (diff > 100) this.currentlyPlaying.seekTo(currentTime + diff/500 + 0.1, true);
+      else if (diff < -100) this.currentlyPlaying.seekTo(currentTime + (diff/500), true);
     }
   }
 
@@ -42,6 +45,7 @@ export class YoutubeProvider {
     if (!this.players[key]) {
       const container = document.createElement('div');
       container.id = 'yt-player-' + key;
+      container.className = 'yt-player';
       document.body.appendChild(container);
       this.players[key] = new (window as any).YT.Player('yt-player-'+key, {
         height: 80,
