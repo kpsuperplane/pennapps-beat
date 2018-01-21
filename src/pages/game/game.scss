@@ -34,6 +34,7 @@ page-game {
         .leader-board{
             //flex: 0;
            // width: 50vw;
+           margin-right: 15px;
             ion-card{
                 border-radius: 10px;
                 background-color:rgba(255,255,255,0.2);
@@ -43,7 +44,7 @@ page-game {
             ion-card-header{                
                 p{
                     font-family: 'lato'; 
-                    font-weight: 300;
+                    font-weight: 400;
                     font-size: 18px;
                     margin: auto;
                     color: #FFF;
@@ -54,7 +55,7 @@ page-game {
                     background-color: rgba(255,255,255,0.2);
                     color: #FFF;
                     font-family: 'lato';
-                    font-weight: 300;
+                    font-weight: 400;
                     border-top: 0.5px solid $purple;
                 }
             }
