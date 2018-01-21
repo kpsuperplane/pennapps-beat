@@ -31,11 +31,11 @@ export class GamePage {
   trackTime: number = 0;
   cuedId: string = "";
   muted: boolean = true;
+  scoreboard: number[] = [];
   queuedKey: string = "";
   
   oldBpm: number = 0;
   newBpm: number = 0;
-  score1: number = 0;
   difference: number = 0;
 
   loadingTrack: boolean = false;
@@ -72,16 +72,17 @@ export class GamePage {
   globalInterval = 0;
 
 
+  addScore(amount: number) {
+    this.users[this.user].userPoints += amount;
+    return this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({userPoints: this.users[this.user].userPoints});
+  }
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController, public youtubeProvider: YoutubeProvider) {
     this.navCtrl.swipeBackEnabled = false;
     this.user = this.navParams.get('user');
     this.sessionId = this.navParams.get('sessionId');
     this.playingInfo = null;
     this.globalInterval = setInterval(()=>{
-      if (this.playing && this.playing.userId == this.user) {
-        this.users[this.user].userPoints += 5;
-        this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({userPoints: this.users[this.user].userPoints});
-      }
+      if (this.playing && this.playing.userId == this.user) this.addScore(5);
     }, 1000);
     this.firebaseProvider.getSession(this.sessionId).child('playing').on('value', (snapshot) => {
       this.playing = snapshot.val();
@@ -129,6 +130,9 @@ export class GamePage {
       for(const key of keys) {
         this.youtubeProvider.cue(key, data[key].id, data[key].key, data[key].start);
       }
+      const scores = keys.filter(key => key != this.user).map(key => data[key].userPoints).sort((a, b) => b-a);
+      this.scoreboard = scores.slice(0, Math.min(scores.length, 2));
+
       this.youtubeProvider.clean(keys.filter(key => data[key].id != -1).map(key => data[key].key));
     });
     this.firebaseProvider.getSession(this.sessionId).once('value', (snapshot) => {
@@ -147,16 +151,12 @@ export class GamePage {
     this.difference = this.newBpm - this.oldBpm;
      if (this.difference >0){
       if (40>this.difference){
-        this.score1 += (40-this.difference)*10;
-      } else{
-        this.score1 += 0;
+        this.addScore(Math.round((40-this.difference)*10));
       }
     } else {
       this.difference = -this.difference;
       if (40>this.difference){
-        this.score1 += (40-this.difference)*10;
-      } else{
-        this.score1 += 0;
+        this.addScore(Math.round((40-this.difference)*10));
       }
     } 
   }
@@ -260,11 +260,9 @@ export class GamePage {
         axios.get('/music/id/' + query).then(({data}) => {
           this.loadingTrack = false;
           this.result = data;
-          this.youtubeProvider.search(this.result.title + ' ' + this.result.artist).then(({data}) => {
-            this.cuedId = data.items[0].id.videoId;
-            this.queuedKey = this.cuedId + this.user + new Date().getTime();
-            this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({id: this.cuedId, key: this.queuedKey, start: 0});
-          });
+          this.cuedId = data.youtubeID;
+          this.queuedKey = this.cuedId + this.user + new Date().getTime();
+          this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({id: this.cuedId, key: this.queuedKey, start: 0});
           const words = [];
           const pseudoCanvas = document.createElement("canvas");
           const context = pseudoCanvas.getContext("2d");
@@ -505,7 +503,7 @@ export class GamePage {
         points.push(y);
       }
       let i;
-      for (i = segmentIndex; i >= 0 && (time - this.playingInfo.analysis.segments[i].start * 1000) < widthTime; --i) addPoint(i);
+      for (i = segmentIndex; i >= 0 && i < this.playingInfo.analysis.segments.length && (time - this.playingInfo.analysis.segments[i].start * 1000) < widthTime; --i) addPoint(i);
       for (let j = 0; j < 5; j++) addPoint(i - j);
       drawCurve(this.ctx, points);
       const lyricLeft = (time/1000) * this.secondWidth - (width/2);
