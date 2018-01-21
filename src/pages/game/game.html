@@ -14,7 +14,6 @@
         <div class="song-info-content">
 
             <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
-
             <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
 
         </div>
@@ -28,14 +27,12 @@
                 <ion-list>
                     <ion-item>
                         <ion-icon name="cart"></ion-icon>
-                        Player 1
+                        {{session !== null && session.users !== undefined ? session.users : 'No users'}}
                     </ion-item>
-
                     <ion-item>
                         <ion-icon name="medical"></ion-icon>
                         Player 2
                     </ion-item>
-
                     <ion-item>
                         <ion-icon name="cafe"></ion-icon>
                         Player 3
