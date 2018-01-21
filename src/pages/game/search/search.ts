@@ -7,7 +7,7 @@ import { Searchbar } from 'ionic-angular/components/searchbar/searchbar';
 
 @Component({
   selector: 'page-search',
-  templateUrl: 'search.html'
+  templateUrl: 'search.html',
 })
 export class SearchPage {
     @ViewChild('input') searchInput: Searchbar;
@@ -35,4 +35,6 @@ export class SearchPage {
         this.viewCtrl.dismiss(query);
     }
 }
+
+
 

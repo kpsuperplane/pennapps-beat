@@ -2,10 +2,6 @@
     <ion-navbar color="dark" transparent>
         <ion-title>{{session !== null ? session.name : 'Loading...'}}</ion-title>
         <ion-buttons end class="back-button-md">
-            <button ion-button icon-only (click)="mute()">
-                <ion-icon [name]="muted ? 'volume-off' : 'volume-up'"></ion-icon>
-            </button>
-            &nbsp;&nbsp;
             <button ion-button icon-only (click)="showQr()">
                 <ion-icon name="qr-scanner"></ion-icon>
             </button>
@@ -16,16 +12,8 @@
     <div class="song-info" style="width: 90%; margin-bottom: 3%;">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
-
             <strong>Song Title</strong>
-
-            <strong>{{result.title}}}</strong>
-
             <br/>Song Artist
-
-            <strong>{{playingInfo !== null ? playingInfo.title : ' '}}</strong>
-            <br/>{{playingInfo !== null ? playingInfo.artist : ' '}}
-
         </div>
     </div>
     <div class="top-container">
@@ -34,44 +22,35 @@
                 <ion-card-header>
                     Leader Board
                 </ion-card-header>
+
                 <ion-list>
                     <button ion-item>
                         <ion-icon name="cart"></ion-icon>
                         Player 1
                     </button>
+
                     <button ion-item>
                         <ion-icon name="medical"></ion-icon>
                         Player 2
                     </button>
+
                     <button ion-item>
                         <ion-icon name="cafe"></ion-icon>
                         Player 3
                     </button>
-                    <button ion-item>
-                        <ion-icon name="paw"></ion-icon>
-                        Player 4
-                    </button>
-                    <button ion-item>
-                        <ion-icon name="paw"></ion-icon>
-                        Player 4
-                    </button>
-                    <button ion-item>
-                        <ion-icon name="paw"></ion-icon>
-                        Player 4
-                    </button>
+
                 </ion-list>
             </ion-card>
         </div>
         <div class="waveform">
 
-            <canvas id="canvas"></canvas>
         </div>
     </div>
 
     <div class="opponent-lyrics">
         Lyrics lalalalalalala...
     </div>
-    
+
     <ion-card class="player-container">
         <ion-card-content>
             <ion-list>
