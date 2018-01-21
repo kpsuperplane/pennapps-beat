@@ -31,6 +31,7 @@ export class GamePage {
   
   oldBpm: number = 0;
   newBpm: number = 0;
+  score1: number = 0;
 
   loadingTrack: boolean = false;
 
@@ -74,6 +75,7 @@ export class GamePage {
           this.playingInfo = data;
           this.oldBpm = this.newBpm;
           this.newBpm = data.analysis.track.tempo;
+          this.updateScore();
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
@@ -98,6 +100,9 @@ export class GamePage {
 
   }
 
+  updateScore(){
+    this.score1 = (40 - (this.newBpm-this.oldBpm))*10;
+  }
   mute() {
     this.muted = !this.muted;
     if (this.muted) this.youtubeProvider.mute();
