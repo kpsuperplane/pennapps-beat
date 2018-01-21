@@ -49,6 +49,7 @@ export class GamePage {
   playingInfo: any | null = null;
   secondWidth = 30;
   songs: {title: string, artist: string}[] = [];
+  users: any[] = null;
   session: {
     name: string;
     users: {[key: string]: any}[];
@@ -68,12 +69,20 @@ export class GamePage {
 
   time: number = 0;
 
+  globalInterval = 0;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController, public youtubeProvider: YoutubeProvider) {
     this.navCtrl.swipeBackEnabled = false;
     this.user = this.navParams.get('user');
     this.sessionId = this.navParams.get('sessionId');
     this.playingInfo = null;
+    this.globalInterval = setInterval(()=>{
+      if (this.playing && this.playing.userId == this.user) {
+        this.users[this.user].userPoints += 5;
+        this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({userPoints: this.users[this.user].userPoints});
+      }
+    }, 1000);
     this.firebaseProvider.getSession(this.sessionId).child('playing').on('value', (snapshot) => {
       this.playing = snapshot.val();
       if (this.playing !== null) {
@@ -116,6 +125,7 @@ export class GamePage {
     this.firebaseProvider.getSession(this.sessionId).child('users').on('value', (snapshot) => {
       const data = snapshot.val();
       const keys = Object.keys(data);
+      this.users = data;
       for(const key of keys) {
         this.youtubeProvider.cue(key, data[key].id, data[key].key, data[key].start);
       }
@@ -253,7 +263,7 @@ export class GamePage {
           this.youtubeProvider.search(this.result.title + ' ' + this.result.artist).then(({data}) => {
             this.cuedId = data.items[0].id.videoId;
             this.queuedKey = this.cuedId + this.user + new Date().getTime();
-            this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).set({id: this.cuedId, key: this.queuedKey, start: 0});
+            this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({id: this.cuedId, key: this.queuedKey, start: 0});
           });
           const words = [];
           const pseudoCanvas = document.createElement("canvas");
@@ -306,8 +316,6 @@ export class GamePage {
   submit() {
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
     this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
-      this.playing.userId = this.user;
-      this.playing.userPoints = 500;
       this.queuedKey = newKey;
       this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({key: newKey});
     });
