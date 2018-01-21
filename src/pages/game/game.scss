@@ -28,15 +28,14 @@ page-game {
         }
     }
     .leader-board{
-        color: white;
         float: left;
         width: 50%;
-        height: 85vh; 
+        height: 72vh; 
     }
     .waveform {
         color: white;
         width: 50%;
-        height: 50%;
+        height: 40vh;
         float: right;
     }
     .opponent-lyrics{
@@ -49,6 +48,7 @@ page-game {
         border-color: white;
         border-width: 2px;
     }
+    
     .qr-code-container {
         position: fixed;
         top: 0;
