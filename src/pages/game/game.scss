@@ -10,6 +10,7 @@ page-game {
     ion-card{
         text-align: center;
         font-family: 'lato';
+        background-color: rgba(255,255,255,0.6);
     }
     .song-info {
         position: relative;
@@ -34,7 +35,8 @@ page-game {
             flex: 0;
             width: 50vw;
             ion-card{
-                background-color: #FFF;
+                border-radius: 10px;
+                background-color:rgba(255,255,255,0.6);
                 margin-right: 0 !important;
                 width: calc(100% - 11px);
             }
@@ -49,7 +51,7 @@ page-game {
             }
             ion-list{
                 ion-item{
-                    background:#FFF;
+                    background-color: rgba(255,255,255,0.6);
                     color:$purple;
                     font-family: 'lato';
                     font-weight: 300;

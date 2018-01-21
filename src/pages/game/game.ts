@@ -57,6 +57,7 @@ export class GamePage {
     id: string,
     seconds: number, 
     userId: string,
+    userPoints: number,
     timestamp: number,
     key: string,
     internal_id: number
@@ -306,6 +307,7 @@ export class GamePage {
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
     this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
       this.playing.userId = this.user;
+      this.playing.userPoints = 500;
       this.queuedKey = newKey;
       this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({key: newKey});
     });
