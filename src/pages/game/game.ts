@@ -29,7 +29,8 @@ export class GamePage {
   muted: boolean = true;
   queuedKey: string = "";
   
-  oldBpm: number=0;
+  oldBpm: number = 0;
+  newBpm: number = 0;
 
   loadingTrack: boolean = false;
 
@@ -71,7 +72,8 @@ export class GamePage {
       if (this.playing !== null) {
         axios.get('/music/id/' + this.playing.internal_id).then(({data}) => {
           this.playingInfo = data;
-          this.oldBpm = data.analysis.track.tempo;
+          this.oldBpm = this.newBpm;
+          this.newBpm = data.analysis.track.tempo;
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
