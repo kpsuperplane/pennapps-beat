@@ -11,10 +11,10 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <allow-navigation href="https://*youtube.com/*" />
+    <allow-navigation href="*://*.youtube.com/*" />
+    <preference name="allowInlineMediaPlayback" value="true" />
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="mediaPlaybackRequiresUserAction" value="false" />
-    <allow-navigation href="*://*.youtube.com/*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />

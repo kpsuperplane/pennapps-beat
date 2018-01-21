@@ -2,6 +2,10 @@
     <ion-navbar color="dark" transparent>
         <ion-title>{{session !== null ? session.name : 'Loading...'}}</ion-title>
         <ion-buttons end class="back-button-md">
+            <button ion-button icon-only (click)="mute()">
+                <ion-icon [name]="muted ? 'volume-off' : 'volume-up'"></ion-icon>
+            </button>
+            &nbsp;&nbsp;
             <button ion-button icon-only (click)="showQr()">
                 <ion-icon name="qr-scanner"></ion-icon>
             </button>
@@ -13,11 +17,16 @@
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <strong>Song Title</strong>
 =======
             <strong>{{result.title}}}</strong>
 >>>>>>> origin/master
             <br/>Song Artist
+=======
+            <strong>{{playingInfo !== null ? playingInfo.title : ' '}}</strong>
+            <br/>{{playingInfo !== null ? playingInfo.artist : ' '}}
+>>>>>>> origin/master
         </div>
     </div>
     <div class="top-container">

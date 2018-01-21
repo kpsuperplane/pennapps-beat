@@ -20,15 +20,17 @@ export class YoutubeProvider {
   currentlyPlaying: any = null;
   currentKey: string = "";
   start: number = 0;
+  muted: boolean = true;
   constructor(public http: HttpClient) {
-    setInterval(this.syncDaemon, 2500);
+    setInterval(this.syncDaemon, 1500);
   }
 
   syncDaemon = () => {
     if (this.currentlyPlaying !== null && typeof this.currentlyPlaying.getCurrentTime === 'function') {
-      console.log((new Date().getTime() - this.currentlyPlaying.getCurrentTime() * 1000 - this.start), new Date().getTime() - this.currentlyPlaying.getCurrentTime() * 1000, this.currentlyPlaying.getCurrentTime() * 1000, this.start);
-      const diff = (new Date().getTime() - this.currentlyPlaying.getCurrentTime() * 1000 - this.start);
-      if (Math.abs(diff) > 50) this.currentlyPlaying.seekTo((new Date().getTime() - this.start + diff/2)/1000);
+      const diff = ((new Date().getTime() - this.start) - this.currentlyPlaying.getCurrentTime() * 1000);
+      console.log(diff);
+      if (diff > 50) this.currentlyPlaying.seekTo(this.currentlyPlaying.getCurrentTime() + diff/1300 + 0.1);
+      else if (diff < -50) this.currentlyPlaying.seekTo(this.currentlyPlaying.getCurrentTime() + (diff/1300));
     }
   }
 
@@ -44,14 +46,16 @@ export class YoutubeProvider {
       document.body.appendChild(container);
       this.players[key] = new (window as any).YT.Player('yt-player-'+key, {
         height: 80,
-        autoplay: 0,
         width: 160,
-        playsinline: 1,
         videoId: id,
+        playerVars: { 
+          playsinline: 1,
+          start: start/1000 + 0.735,
+          autoplay: 0
+        },
         events: {
           'onReady': () => {
             try {
-              this.players[key].seekTo(start/1000);
               this.players[key].pauseVideo();
             } catch(e) {}
           }
@@ -64,17 +68,29 @@ export class YoutubeProvider {
           if (this.players[key] === undefined) return;
           if (this.players[key].seekTo) {
             clearInterval(interval);
-            this.players[key].seekTo(start/1000);
+            this.players[key].seekTo(start/1000 + 0.735, true);
+            this.players[key].pauseVideo();
+
           }
         }, 50);
       } else {
-        this.players[key].seekTo(start/1000);
+        this.players[key].seekTo(start/1000 + 0.35, true);
+        this.players[key].pauseVideo();
       }
     }
   }
 
+  mute() {
+    this.muted = true;
+    if (this.currentlyPlaying) this.currentlyPlaying.mute();
+  }
+
+  unmute() {
+    this.muted = false;
+    if (this.currentlyPlaying) this.currentlyPlaying.unMute();
+  }
+
   clean(saveKeys) {
-    console.log(saveKeys);
     const toDelete = Object.keys(this.players).filter(key => saveKeys.indexOf(key) === -1 && key !== this.currentKey);
     for (const key of toDelete) {
       try {
@@ -91,16 +107,18 @@ export class YoutubeProvider {
       this.currentlyPlaying.destroy();
     }
     this.currentlyPlaying = this.players[key];
+    if (this.muted) this.currentlyPlaying.mute();
     if (typeof this.currentlyPlaying.playVideo !== 'function') {
       const interval = setInterval(() => {
         if (this.currentlyPlaying === undefined) return;
         if (typeof this.currentlyPlaying.playVideo === 'function') {
           clearInterval(interval);
-          this.currentlyPlaying.seekTo(start);
+          this.currentlyPlaying.seekTo(start/1000 + 0.35, true);
           this.currentlyPlaying.playVideo();
         }
       }, 50);
     } else {
+      this.currentlyPlaying.seekTo(start/1000 + 0.35, true);
       this.currentlyPlaying.playVideo();
     }
     this.start = timestamp - start;
