@@ -296,30 +296,30 @@ export class GamePage {
   }
 
   
-  ionViewDidLoad() {
+  // ionViewDidLoad() {
     
-    var canvas = this.canvas.nativeElement;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var ctx = canvas.getContext("2d");
-    var bufferLength = this.result.analysis.beats.length;
-    var dataArray = this.result.analysis.beats;
-    var WIDTH = canvas.width;
-    var HEIGHT = canvas.height;
-    var barWidth = (WIDTH / bufferLength) * 2.5;
-    var barHeight;
-    var x = 0;
+  //   var canvas = this.canvas.nativeElement;
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+  //   var ctx = canvas.getContext("2d");
+  //   var bufferLength = this.result.analysis.beats.length;
+  //   var dataArray = this.result.analysis.beats;
+  //   var WIDTH = canvas.width;
+  //   var HEIGHT = canvas.height;
+  //   var barWidth = (WIDTH / bufferLength) * 2.5;
+  //   var barHeight;
+  //   var x = 0;
 
-    function renderFrame() {
-      requestAnimationFrame(renderFrame);
-      x = 0;
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, WIDTH, HEIGHT);
-      for (var i = 0; i < 1000; i++) {
-        barHeight = dataArray[i];
-        ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight+100);
-        x += barWidth + 10;
-      }
-    }
-  }
+  //   function renderFrame() {
+  //     requestAnimationFrame(renderFrame);
+  //     x = 0;
+  //     ctx.fillStyle = "#000";
+  //     ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  //     for (var i = 0; i < 1000; i++) {
+  //       barHeight = dataArray[i];
+  //       ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight+100);
+  //       x += barWidth + 10;
+  //     }
+  //   }
+  // }
 }
