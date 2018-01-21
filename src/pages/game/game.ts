@@ -484,6 +484,7 @@ export class GamePage {
     const renderFrame = () => {
       this.ctx.clearRect(0, 0, this.canvasRect.width, this.canvasRect.height);
       const time = this.playing.seconds * 1000 + (new Date().getTime() - this.playing.timestamp);
+      if (segmentIndex >= this.playingInfo.analysis.segments.length && (this.playingInfo.analysis.track.duration - (time/1000) > 2)) segmentIndex = 0;
       while (segmentIndex < this.playingInfo.analysis.segments.length && this.playingInfo.analysis.segments[segmentIndex].start < time/1000) ++segmentIndex;
       this.ctx.stroke();
       this.ctx.beginPath();
