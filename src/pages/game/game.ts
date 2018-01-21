@@ -36,6 +36,7 @@ export class GamePage {
   oldBpm: number = 0;
   newBpm: number = 0;
   score1: number = 0;
+  difference: number = 0;
 
   loadingTrack: boolean = false;
 
@@ -104,7 +105,7 @@ export class GamePage {
             this.renderTrack();
           }, 16.66);*/
           this.visualize();
-          this.oldBpm = data.analysis.track.tempo;
+          this.oldBpm = this.newBpm;
           this.newBpm = data.analysis.track.tempo;
           this.updateScore();
         });
@@ -132,7 +133,21 @@ export class GamePage {
   }
 
   updateScore(){
-    this.score1 = (40 - (this.newBpm-this.oldBpm))*10;
+    this.difference = this.newBpm - this.oldBpm;
+     if (this.difference >0){
+      if (40>this.difference){
+        this.score1 += (40-this.difference)*10;
+      } else{
+        this.score1 += 0;
+      }
+    } else {
+      this.difference = -this.difference;
+      if (40>this.difference){
+        this.score1 += (40-this.difference)*10;
+      } else{
+        this.score1 += 0;
+      }
+    } 
   }
   mute() {
     this.muted = !this.muted;
