@@ -13,6 +13,7 @@ import { YoutubeProvider } from '../../providers/youtube/youtube';
 })
 
 export class GamePage {
+  ctx: any;
 
   @ViewChild('track') track: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
@@ -297,14 +298,16 @@ export class GamePage {
   }
 
   renderFrame = () => {
-    x = 0;
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
-    for (var i = 0; i < 1000; i++) {
-      barHeight = dataArray[i];
-      ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight+100);
+    const x = 0;
+    const { width, height } = this.canvas.nativeElement.getBoundingClientRect();
+    this.ctx.fillStyle = "#000";
+    this.ctx.clearRect(0, 0, width, height);
+    //console.log(this.playingInfo);
+    /*for (var i = 0; i < 1000; i++) {
+      const barHeight = dataArray[i];
+      this.ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight+100);
       x += barWidth + 10;
-    }
+    }*/
   }
 
   
@@ -312,14 +315,7 @@ export class GamePage {
     var canvas = this.canvas.nativeElement;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    var ctx = canvas.getContext("2d");
-    var bufferLength = this.result.analysis.beats.length;
-    var dataArray = this.result.analysis.beats;
-    var WIDTH = canvas.width;
-    var HEIGHT = canvas.height;
-    var barWidth = (WIDTH / bufferLength) * 2.5;
-    var barHeight;
-    var x = 0;
+    this.ctx = canvas.getContext("2d");
     setInterval(() => {
       requestAnimationFrame(this.renderFrame)
     }, 16.66);
