@@ -15,7 +15,6 @@
         <div class="song-info-content">
             <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
             <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
-
         </div>
     </div>
     <div class="top-container">
@@ -46,7 +45,7 @@
     </div>
 
     <div class="opponent-lyrics">
-      <p>current lyrics</p>
+        <canvas id="lyrics" #lyrics></canvas>
     </div>
 
     <ion-card class="player-container">

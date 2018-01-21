@@ -7,16 +7,21 @@ page-home {
             justify-content: center;
         }
         #panel {
-            background-color: #D056DB;
+            position: relative;
+            padding: 1rem 0;
+            background-color: #FFF !important;
             transition: max-height 0.2s ease-out;
-
-            p{
-                padding-left: 5px;
-                padding-top: 10px;
-                color: #FFF;
-                font-family: 'lato';
-                font-weight: 300;
-                font-size: 1.5rem;
+            input {
+                color: #000;
+            }
+            #continue {
+                position: absolute;
+                right: 0;
+                top: 1rem;
+            }
+            ion-item {
+                border-style: none !important;
+                box-shadow: none !important;
             }
             button {
                 margin-right: 10px;
