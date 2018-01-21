@@ -20,11 +20,11 @@ export class YoutubeProvider {
   start: number = 0;
   muted: boolean = true;
   constructor(public http: HttpClient) {
-    setInterval(this.syncDaemon, 2000);
+    setInterval(this.syncDaemon, 3000);
   }
 
   syncDaemon = () => {
-    if (this.currentlyPlaying !== null &&  typeof this.currentlyPlaying.getPlayerState === 'function' && this.currentlyPlaying.getPlayerState() !== 2 && this.currentlyPlaying.getPlayerState() !== 1) this.currentlyPlaying.playVideo();
+    if (this.currentlyPlaying !== null &&  typeof this.currentlyPlaying.getPlayerState === 'function' && this.currentlyPlaying.getPlayerState() !== 1) this.currentlyPlaying.playVideo();
     if (this.currentlyPlaying !== null && typeof this.currentlyPlaying.getCurrentTime === 'function') {
       const currentTime = this.currentlyPlaying.getCurrentTime();
       const diff = ((new Date().getTime() - this.start) - currentTime * 1000);
@@ -53,7 +53,7 @@ export class YoutubeProvider {
         events: {
           'onReady': () => {
             try {
-              this.players[key].pauseVideo();
+              if (this.players[key] !== undefined) this.players[key].pauseVideo();
             } catch(e) {}
           }
         }
@@ -88,7 +88,17 @@ export class YoutubeProvider {
   }
 
   clean(saveKeys) {
-    const toDelete = Object.keys(this.players).filter(key => saveKeys.indexOf(key) === -1 && key !== this.currentKey);
+    let toDelete;
+    if (saveKeys === -1) {
+      toDelete = Object.keys(this.players);
+      if (this.currentlyPlaying !== null) {
+        this.currentlyPlaying.destroy();
+        this.currentlyPlaying = null;
+        this.currentKey = "";
+      }
+    } else {
+      toDelete = Object.keys(this.players).filter(key => saveKeys.indexOf(key) === -1 && key !== this.currentKey);
+    }
     for (const key of toDelete) {
       try {
         this.players[key].destroy();

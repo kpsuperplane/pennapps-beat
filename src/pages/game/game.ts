@@ -387,8 +387,6 @@ export class GamePage {
     const widthTime = 250;
     let segmentIndex = 0;
 
-    const current = this.playingInfo._id;
-
     function drawLines(ctx, pts) {
       ctx.moveTo(pts[0], pts[1]);
       for(let i = 2; i < pts.length - 1; i += 2) ctx.lineTo(pts[i], pts[i+1]);
@@ -556,6 +554,10 @@ export class GamePage {
     this.gameInterval = setInterval(renderFrame, 16.66);
   }
 
+  ionViewWillLeave() {
+    if (this.globalInterval !== null) clearInterval(this.globalInterval);
+    this.youtubeProvider.clean(-1);
+  }
 
   ionViewDidLoad() {
     var canvas = this.canvas.nativeElement;
