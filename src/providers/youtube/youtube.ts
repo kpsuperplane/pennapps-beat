@@ -1,12 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const key = 'AIzaSyBN92IxK_KzS6sHRHVlcuFO50K_hhdGlc0';
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 /*
   Generated class for the YoutubeProvider provider.
 
