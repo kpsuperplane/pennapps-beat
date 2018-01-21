@@ -461,8 +461,16 @@ export class GamePage {
   ionViewDidLoad() {
     var canvas = this.canvas.nativeElement;
     this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
-    canvas.width = this.canvasRect.width;;
-    canvas.height = this.canvasRect.height;
+    const { width, height } = this.canvasRect;
+    canvas.width = width;
+    canvas.height = height;
     this.ctx = canvas.getContext("2d");
+    this.canvas.nativeElement.setAttribute('width', width * 2);
+    this.canvas.nativeElement.setAttribute('height', height * 2);
+    this.ctx.width = width * window.devicePixelRatio;
+    this.ctx.height = height * window.devicePixelRatio;
+    this.canvas.nativeElement.style.width = width + 'px';
+    this.canvas.nativeElement.style.height = height + 'px';
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
 }
