@@ -71,8 +71,10 @@
                     <canvas class="track" id="track" #track height="100px" width="100%"></canvas>
                 </ion-item>
                 <hr [hidden]="result === null" />
-                <button [hidden]="result === null" ion-item icon-only (click)="submit()" class="submit" detail-none>
-                    <ion-icon name="color-wand"></ion-icon>
+                <button [hidden]="result === null" [disabled]="(result !== null && playingInfo !== null && result._id === playingInfo._id) || lastSubmitted < cooldown" ion-item icon-only (click)="submit()" class="submit" detail-none>
+                    <ion-icon *ngIf="!(result !== null && playingInfo !== null && result._id === playingInfo._id) && lastSubmitted >= cooldown" name="color-wand"></ion-icon>
+                    <span *ngIf="(result !== null && playingInfo !== null && result._id === playingInfo._id) && lastSubmitted >= cooldown">Cannot submit same track</span>
+                    <span *ngIf="lastSubmitted < cooldown">Cooldown: {{cooldown - lastSubmitted}} second(s)</span>
                 </button>
             </ion-list>
         </ion-card-content>

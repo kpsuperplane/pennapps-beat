@@ -32,6 +32,7 @@ export class GamePage {
   cuedId: string = "";
   muted: boolean = true;
   scoreboard: any[] = [];
+  lastSubmitted = 6;
   queuedKey: string = "";
   gameInterval: number = null;
   
@@ -67,6 +68,7 @@ export class GamePage {
 
   qrHidden = true;
   qrVisible = false;
+  cooldown = 6;
 
   time: number = 0;
 
@@ -84,6 +86,7 @@ export class GamePage {
     this.playingInfo = null;
     this.globalInterval = setInterval(()=>{
       if (this.playing && this.playing.userId == this.user) this.addScore(5);
+      if (this.lastSubmitted < this.cooldown) this.lastSubmitted++;
     }, 1000);
     this.firebaseProvider.getSession(this.sessionId).child('playing').on('value', (snapshot) => {
       this.playing = snapshot.val();
@@ -313,6 +316,7 @@ export class GamePage {
 
  
   submit() {
+    this.lastSubmitted = 0;
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
     this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime/1000, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
       this.queuedKey = newKey;
@@ -558,6 +562,7 @@ export class GamePage {
   ionViewWillLeave() {
     if (this.globalInterval !== null) clearInterval(this.globalInterval);
     this.youtubeProvider.clean(-1);
+    this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).set(null);
   }
 
   ionViewDidLoad() {
