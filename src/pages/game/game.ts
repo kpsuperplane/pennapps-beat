@@ -31,7 +31,7 @@ export class GamePage {
   trackTime: number = 0;
   cuedId: string = "";
   muted: boolean = true;
-  scoreboard: number[] = [];
+  scoreboard: any[] = [];
   queuedKey: string = "";
   
   oldBpm: number = 0;
@@ -130,7 +130,7 @@ export class GamePage {
       for(const key of keys) {
         this.youtubeProvider.cue(key, data[key].id, data[key].key, data[key].start);
       }
-      const scores = keys.filter(key => key != this.user).map(key => data[key].userPoints).sort((a, b) => b-a);
+      const scores = keys.filter(key => key != this.user).map(key => ({score: data[key].userPoints, name: data[key].name})).sort((a, b) => b.score - a.score);
       this.scoreboard = scores.slice(0, Math.min(scores.length, 2));
 
       this.youtubeProvider.clean(keys.filter(key => data[key].id != -1).map(key => data[key].key));
@@ -494,7 +494,7 @@ export class GamePage {
       this.ctx.beginPath();
       const points = [];
       const addPoint = (i) => {
-        if (i < 0) return;
+        if (i < 0 || i >= this.playingInfo.analysis.segments.length) return;
         const segmentPercentLocation = (1-(time - this.playingInfo.analysis.segments[i].start * 1000)/widthTime);
         const volume = Math.max(0, Math.min(1, ((this.playingInfo.analysis.segments[i].loudness_start + this.playingInfo.analysis.segments[i].loudness_max)/2 + this.playingInfo.analysis.segments[i].loudness_max_time + 40)/40));
         const x = this.canvasRect.width * segmentPercentLocation;
