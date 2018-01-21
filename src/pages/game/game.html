@@ -17,14 +17,9 @@
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
 
-            <strong>Song Title</strong>
+            <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
 
-            <strong>{{result.title}}}</strong>
-
-            <br/>Song Artist
-
-            <strong>{{playingInfo !== null ? playingInfo.title : ' '}}</strong>
-            <br/>{{playingInfo !== null ? playingInfo.artist : ' '}}
+            <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
 
         </div>
     </div>
@@ -82,7 +77,7 @@
                             <strong>No Song Selected</strong>
                             <br/>Click here to search
                         </div>
-                        <div class="song-info-content" style='color: #D056DB' *ngIf="result !== null">
+                        <div *ngIf="result !== null" class="song-info-content" style='color: #D056DB'>
                             <strong>{{result.title}}</strong>
                             <br/>{{result.artist}}
                         </div>
