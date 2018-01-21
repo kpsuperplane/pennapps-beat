@@ -12,30 +12,30 @@
     <div class="song-info" style="width: 90%; margin-bottom: 3%;">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
-
             <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
             <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
-
         </div>
     </div>
     <div class="top-container">
         <div class="leader-board">
             <ion-card>
                 <ion-card-header>
-                    Leader Board
+                  <p>Leader Board</p>  
                 </ion-card-header>
                 <ion-list>
                     <ion-item>
                         <ion-icon name="cart"></ion-icon>
-                        {{session !== null && session.users !== undefined ? session.users : 'No users'}}
+                        {{playing !== null && playing !== undefined ? playing.userId : "what the fuck is happening now?"}}
                     </ion-item>
                     <ion-item>
                         <ion-icon name="medical"></ion-icon>
                         Player 2
+                        <span>Score 2</span>
                     </ion-item>
                     <ion-item>
                         <ion-icon name="cafe"></ion-icon>
                         Player 3
+                        <span>Score 3</span>
                     </ion-item>
                 </ion-list>
             </ion-card>
@@ -44,7 +44,7 @@
     </div>
 
     <div class="opponent-lyrics">
-        Lyrics lalalalalalala...
+      <p>current lyrics</p>  
     </div>
 
     <ion-card class="player-container">
