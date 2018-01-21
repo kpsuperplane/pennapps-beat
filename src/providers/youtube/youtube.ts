@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import axios from '../../axios';
 
 const key = 'AIzaSyBN92IxK_KzS6sHRHVlcuFO50K_hhdGlc0';
 var tag = document.createElement('script');
@@ -31,13 +30,9 @@ export class YoutubeProvider {
       const currentTime = this.currentlyPlaying.getCurrentTime();
       const diff = ((new Date().getTime() - this.start) - currentTime * 1000);
       console.log(diff);
-      if (diff > 100) this.currentlyPlaying.seekTo(currentTime + diff/1000 + 0.1, true);
-      else if (diff < -100) this.currentlyPlaying.seekTo(currentTime + (diff/1000), true);
+      if (diff > 300) this.currentlyPlaying.seekTo(currentTime + diff/1000 + 0.1, true);
+      else if (diff < -300) this.currentlyPlaying.seekTo(currentTime + (diff/1000), true);
     }
-  }
-
-  search(query: string) {
-    return axios.get('https://www.googleapis.com/youtube/v3/search?key=' + key + '&part=snippet&type=video&videoEmbeddable=true&q=' + encodeURIComponent(query + ' radio edit'));
   }
 
   cue(user: string, id: string, key: string, start: number) {

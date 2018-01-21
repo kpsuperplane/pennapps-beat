@@ -13,6 +13,7 @@
         </ion-buttons>
     </ion-navbar>
 </ion-header>
+<canvas id="canvas" #canvas class="waveform"></canvas>
 <ion-content no-bounce>
     <div class="song-info" style="width: 90%; margin-bottom: 3%;">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
@@ -25,34 +26,26 @@
         <div class="leader-board">
             <ion-card>
                 <ion-card-header>
-                  <p><strong>Leader Board</strong></p>  
+                  <p><strong>Scores</strong></p>  
                 </ion-card-header>
                 <ion-list>
-                    <ion-item>
-                        <ion-icon name="cart"></ion-icon>
-                        P1
-                        <span>Score: {{users !== null ? users[user].userPoints : 0}}</span>
+                    <ion-item *ngIf="users !== null">
+                        <span>{{users[user].userPoints}}</span><span>{{users[user].name}} (Me)</span>
                     </ion-item>
-                    <ion-item>
-                        <ion-icon name="medical"></ion-icon>
-                        P2
-                        <span>{{'score: '+score1}} </span>
-                    </ion-item>
-                    <ion-item>
-                        <ion-icon name="cafe"></ion-icon>
-                        P3
-                        <span>Score: </span>
+                    <ion-item *ngFor="let score of scoreboard">
+                        <span>{{score.score}}</span><span>{{score.name}}</span>
                     </ion-item>
                 </ion-list>
             </ion-card>
         </div>
-        <canvas id="canvas" #canvas class="waveform"></canvas>
     </div>
+
+    <div class="spacer"></div>
 
     <div class="opponent-lyrics">
         <canvas id="lyrics" #lyrics></canvas>
     </div>
-
+    <div text-center style="margin-top: -25px;" *ngIf="playing !== null"><span class="arrow-up"></span></div>
     <ion-card class="player-container">
         <ion-card-content>
             <ion-list>
