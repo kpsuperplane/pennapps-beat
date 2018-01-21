@@ -12,105 +12,63 @@
     <div class="song-info" style="width: 90%; margin-bottom: 3%;">
         <img src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png">
         <div class="song-info-content">
-            <strong>Song Title</strong><br/>Song Artist
+            <strong>Song Title</strong>
+            <br/>Song Artist
         </div>
-    </div>  
+    </div>
     <div class="top-container">
-    <div class="leader-board">
-        <ion-card>
-            <ion-card-header>
-              Leader Board
-            </ion-card-header>
-          
-            <ion-list>
-              <button ion-item>
-                <ion-icon name="cart"></ion-icon>
-                Player 1
-                </button>
-          
-              <button ion-item>
-                <ion-icon name="medical"></ion-icon>
-                Player 2
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="cafe"></ion-icon>
-                Player 3
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="paw"></ion-icon>
-                Player 4
-              </button>
-              <button ion-item>
-                <ion-icon name="paw"></ion-icon>
-                Player 4
-              </button>
-              <button ion-item>
-                <ion-icon name="paw"></ion-icon>
-                Player 4
-              </button>
-          
-            </ion-list>
-          </ion-card>
-    </div>  
-    <div class="waveform">
-        <ion-card>
-            <ion-card-header>
-              Leader Board
-            </ion-card-header>
-          
-            <ion-list>
-              <button ion-item>
-                <ion-icon name="cart"></ion-icon>
-                Shopping
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="medical"></ion-icon>
-                Hospital
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="cafe"></ion-icon>
-                Cafe
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="paw" item-start></ion-icon>
-                Dog Park
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="beer" item-start></ion-icon>
-                Pub
-              </button>
-          
-              <button ion-item>
-                <ion-icon name="planet" item-start></ion-icon>
-                Space
-              </button>
-          
-            </ion-list>
-          </ion-card>
-    </div>  
-</div>
-    <div class="opponent-lyrics">
-        Lyrics lalalalalalala... 
-    </div>  
+        <div class="leader-board">
+            <ion-card>
+                <ion-card-header>
+                    Leader Board
+                </ion-card-header>
+                <ion-list>
+                    <button ion-item>
+                        <ion-icon name="cart"></ion-icon>
+                        Player 1
+                    </button>
+                    <button ion-item>
+                        <ion-icon name="medical"></ion-icon>
+                        Player 2
+                    </button>
+                    <button ion-item>
+                        <ion-icon name="cafe"></ion-icon>
+                        Player 3
+                    </button>
+                    <button ion-item>
+                        <ion-icon name="paw"></ion-icon>
+                        Player 4
+                    </button>
+                    <button ion-item>
+                        <ion-icon name="paw"></ion-icon>
+                        Player 4
+                    </button>
+                    <button ion-item>
+                        <ion-icon name="paw"></ion-icon>
+                        Player 4
+                    </button>
+                </ion-list>
+            </ion-card>
+        </div>
+        <div class="waveform">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
     <ion-card class="player-container">
         <ion-card-content>
             <ion-list>
                 <button ion-item (click)="search()">
                     <img float-left class="search-record" src="http://www.clker.com/cliparts/q/7/x/M/D/R/record-player-hi.png" />
                     <div class="song-info" *ngIf="!loadingTrack">
-                        <div class="song-info-content" style= 'color: #444' *ngIf="result === null">
-                            <strong>No Song Selected</strong><br/>Click here to search...
+                        <div class="song-info-content" style='color: #444' *ngIf="result === null">
+                            <strong>No Song Selected</strong>
+                            <br/>Click here to search...
                         </div>
-                        <div class="song-info-content" style= 'color: #D056DB' *ngIf="result !== null">
-                            <strong>{{result.title}}</strong><br/>{{result.artist}}
+                        <div class="song-info-content" style='color: #D056DB' *ngIf="result !== null">
+                            <strong>{{result.title}}</strong>
+                            <br/>{{result.artist}}
                         </div>
-                    </div>  
+                    </div>
                     <div class="song-info" *ngIf="loadingTrack">
                         <div class="song-info-content">
                             <ion-spinner></ion-spinner>
@@ -120,7 +78,7 @@
                 <ion-item id="track-item" [class]="result === null ? 'hidden' : ''">
                     <canvas class="track" id="track" #track height="100px" width="100%"></canvas>
                 </ion-item>
-                <hr [hidden]="result === null"/>
+                <hr [hidden]="result === null" />
                 <button [hidden]="result === null" ion-item icon-only (click)="submit()" class="submit" detail-none>
                     <ion-icon name="color-wand"></ion-icon>
                 </button>
