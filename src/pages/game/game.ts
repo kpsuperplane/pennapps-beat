@@ -28,6 +28,8 @@ export class GamePage {
   cuedId: string = "";
   muted: boolean = true;
   queuedKey: string = "";
+  
+  oldBpm: number=0;
 
   loadingTrack: boolean = false;
 
@@ -57,7 +59,7 @@ export class GamePage {
   qrVisible = false;
 
   time: number = 0;
-  
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController, public youtubeProvider: YoutubeProvider) {
     this.navCtrl.swipeBackEnabled = false;
@@ -69,6 +71,7 @@ export class GamePage {
       if (this.playing !== null) {
         axios.get('/music/id/' + this.playing.internal_id).then(({data}) => {
           this.playingInfo = data;
+          this.oldBpm = data.analysis.track.tempo;
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }

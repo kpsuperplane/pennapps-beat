@@ -1,3 +1,4 @@
+
 <ion-header no-border>
     <ion-navbar color="dark" transparent>
         <ion-title>{{session !== null ? session.name : 'Loading...'}}</ion-title>
@@ -16,6 +17,8 @@
             <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
 
             <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
+            <br/>
+            <br/>{{playingInfo !== null && playingInfo !== undefined ? oldBpm +'bpm' : 'BPM'}}
 
         </div>
     </div>
