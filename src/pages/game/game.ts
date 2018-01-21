@@ -27,11 +27,13 @@ export class GamePage {
   trackTouchTime = -1;
   trackLyrics = [];
   trackTouchVelocity = 0;
-  trackFont="15px Lato";
+  trackFont="1.5rem Lato";
   trackTime: number = 0;
   cuedId: string = "";
   muted: boolean = true;
   queuedKey: string = "";
+  
+  oldBpm: number=0;
 
   loadingTrack: boolean = false;
 
@@ -46,11 +48,11 @@ export class GamePage {
   songs: {title: string, artist: string}[] = [];
   session: {
     name: string;
-    users: {[key: string]: true}[];
+    users: {[key: string]: any}[];
   } | null = null;
   playing: {
     id: string,
-    seconds: number,
+    seconds: number, 
     userId: string,
     timestamp: number,
     key: string,
@@ -100,6 +102,7 @@ export class GamePage {
             this.renderTrack();
           }, 16.66);*/
           this.visualize();
+          this.oldBpm = data.analysis.track.tempo;
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
@@ -214,7 +217,7 @@ export class GamePage {
   }
   commitSeek = () => {
     clearTimeout(this.commitSeekTimeout);
-    this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).set({id: this.cuedId, key: this.queuedKey, start: this.trackTime});
+    this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({id: this.cuedId, key: this.queuedKey, start: this.trackTime});
   }
   search() {
     const modal = this.modalCtrl.create(SearchPage, {songs: this.songs});
@@ -276,13 +279,18 @@ export class GamePage {
     requestAnimationFrame(this.renderTrack);
   }
 
+ 
   submit() {
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
     this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
+      this.playing.userId = this.user;
       this.queuedKey = newKey;
       this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({key: newKey});
     });
+    
   }
+
+ 
 
   trackTouchEnd = (e) => {
     let velocity = this.trackTouchVelocity;
@@ -301,26 +309,27 @@ export class GamePage {
   ngAfterViewInit() {
     this.trackCanvas = this.track.nativeElement.getContext('2d');
     this.lyricCtx = this.lyrics.nativeElement.getContext('2d');
-    if (window.devicePixelRatio > 1) {
+    const deviceRatio = window.devicePixelRatio;
+    if (deviceRatio > 1) {
       {
         const { width, height } = this.track.nativeElement.getBoundingClientRect();
-        this.track.nativeElement.setAttribute('width', width * 2);
-        this.track.nativeElement.setAttribute('height', height * 2);
-        this.trackCanvas.width = width * window.devicePixelRatio;
-        this.trackCanvas.height = height * window.devicePixelRatio;
+        this.track.nativeElement.setAttribute('width', width * deviceRatio);
+        this.track.nativeElement.setAttribute('height', height * deviceRatio);
+        this.trackCanvas.width = width * deviceRatio;
+        this.trackCanvas.height = height * deviceRatio;
         this.track.nativeElement.style.width = width + 'px';
         this.track.nativeElement.style.height = height + 'px';
-        this.trackCanvas.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.trackCanvas.scale(deviceRatio, deviceRatio);
       }
       {
         let { width, height } = this.lyrics.nativeElement.getBoundingClientRect();
-        this.lyrics.nativeElement.setAttribute('width', width * 2);
-        this.lyrics.nativeElement.setAttribute('height', height * 2);
-        this.lyricCtx.width = width * window.devicePixelRatio;
-        this.lyricCtx.height = height * window.devicePixelRatio;
+        this.lyrics.nativeElement.setAttribute('width', width * deviceRatio);
+        this.lyrics.nativeElement.setAttribute('height', height * deviceRatio);
+        this.lyricCtx.width = width * deviceRatio;
+        this.lyricCtx.height = height * deviceRatio;
         this.lyrics.nativeElement.style.width = width + 'px';
         this.lyrics.nativeElement.style.height = height + 'px';
-        this.lyricCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.lyricCtx.scale(deviceRatio, deviceRatio);
       }
     }
     this.track.nativeElement.addEventListener('touchstart', this.trackTouchStart);
@@ -451,7 +460,7 @@ export class GamePage {
       const addPoint = (i) => {
         if (i < 0) return;
         const segmentPercentLocation = (1-(time - this.playingInfo.analysis.segments[i].start * 1000)/widthTime);
-        const volume = Math.max(0, Math.min(1, ((this.playingInfo.analysis.segments[i].loudness_start + this.playingInfo.analysis.segments[i].loudness_max)/2 + this.playingInfo.analysis.segments[i].loudness_max_time + 30)/40));
+        const volume = Math.max(0, Math.min(1, ((this.playingInfo.analysis.segments[i].loudness_start + this.playingInfo.analysis.segments[i].loudness_max)/2 + this.playingInfo.analysis.segments[i].loudness_max_time + 40)/40));
         const x = this.canvasRect.width * segmentPercentLocation;
         const y = this.canvasRect.height - (this.canvasRect.height * volume);
         points.push(x);
@@ -521,13 +530,14 @@ export class GamePage {
     const { width, height } = this.canvasRect;
     canvas.width = width;
     canvas.height = height;
+    const deviceRatio = window.devicePixelRatio;
     this.ctx = canvas.getContext("2d");
     this.canvas.nativeElement.setAttribute('width', width * 2);
     this.canvas.nativeElement.setAttribute('height', height * 2);
-    this.ctx.width = width * window.devicePixelRatio;
-    this.ctx.height = height * window.devicePixelRatio;
+    this.ctx.width = width * deviceRatio;
+    this.ctx.height = height * deviceRatio;
     this.canvas.nativeElement.style.width = width + 'px';
     this.canvas.nativeElement.style.height = height + 'px';
-    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.ctx.scale(deviceRatio, deviceRatio);
   }
 }

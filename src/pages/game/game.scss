@@ -32,11 +32,11 @@ page-game {
         display:flex;
         .leader-board{
             flex: 0;
-
+            width: 50vw;
             ion-card{
                 background-color: #FFF;
                 margin-right: 0 !important;
-                width: calc(100% - 12px);
+                width: calc(100% - 11px);
             }
             ion-card-header{                
                 p{
@@ -59,8 +59,8 @@ page-game {
         }
         .waveform {
             color: white;
+            width: 50vw;
             margin: 12px 12px 12px 0;
-            height: 100%;
             flex: 1;
         }
     }
@@ -134,7 +134,7 @@ page-game {
             height: 100px;
         }
         .item {
-            padding: 1.75rem;
+            padding: 1rem;
             padding-left: 0 !important;
             border-style: none !important;
             ion-label {
@@ -144,7 +144,7 @@ page-game {
                 height: 3rem;
                 width: auto;
                 position: absolute;
-                top: 2.25rem;
+                top: 1.75rem;
                 left: 2rem;
             }
             .item-inner {
@@ -168,8 +168,11 @@ page-game {
                 height: 100px;
             }
         }
+        .label {
+            margin: 8px 8px !important;
+        }
         button.submit {
-            padding: 12px !important;
+            padding: 6px !important;
             width: 100%;
             text-align: center;
             color: map-get($colors, primary);
