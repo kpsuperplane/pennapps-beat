@@ -7,6 +7,9 @@
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <access origin="*"/>                    
+    <allow-intent href="*" />
+    <allow-navigation href="*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
