@@ -26,13 +26,13 @@ export class YoutubeProvider {
   }
 
   syncDaemon = () => {
-    if (this.currentlyPlaying !== null && this.currentlyPlaying.getPlayerState() !== 2 && this.currentlyPlaying.getPlayerState() !== 1) this.currentlyPlaying.playVideo();
+    if (this.currentlyPlaying !== null &&  typeof this.currentlyPlaying.getPlayerState === 'function' && this.currentlyPlaying.getPlayerState() !== 2 && this.currentlyPlaying.getPlayerState() !== 1) this.currentlyPlaying.playVideo();
     if (this.currentlyPlaying !== null && typeof this.currentlyPlaying.getCurrentTime === 'function') {
       const currentTime = this.currentlyPlaying.getCurrentTime();
       const diff = ((new Date().getTime() - this.start) - currentTime * 1000);
       console.log(diff);
-      if (diff > 100) this.currentlyPlaying.seekTo(currentTime + diff/500 + 0.1, true);
-      else if (diff < -100) this.currentlyPlaying.seekTo(currentTime + (diff/500), true);
+      if (diff > 100) this.currentlyPlaying.seekTo(currentTime + diff/1000 + 0.1, true);
+      else if (diff < -100) this.currentlyPlaying.seekTo(currentTime + (diff/1000), true);
     }
   }
 

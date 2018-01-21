@@ -558,7 +558,11 @@ export class GamePage {
       }
 
     }
-    interval = setInterval(renderFrame, 16.66);
+    try {
+      interval = setInterval(renderFrame, 16.66);
+    } catch(e) {
+      clearInterval(interval);
+    }
   }
 
 
