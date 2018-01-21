@@ -25,6 +25,7 @@ export class GamePage {
   trackFont="15px Lato";
   trackTime: number = 0;
   cuedId: string = "";
+  muted: boolean = true;
   queuedKey: string = "";
 
   loadingTrack: boolean = false;
@@ -74,13 +75,22 @@ export class GamePage {
       }
       this.youtubeProvider.clean(keys.filter(key => data[key].id != -1).map(key => data[key].key));
     });
-    this.firebaseProvider.getSession(this.sessionId).on('value', (snapshot) => {
+    this.firebaseProvider.getSession(this.sessionId).once('value', (snapshot) => {
       this.session = snapshot.val();
+      if (Object.keys(this.session.users).length === 1) {
+        this.mute();
+      }
     });
     axios.get('/music').then(({data}) => {
       this.songs = data;
     });
 
+  }
+
+  mute() {
+    this.muted = !this.muted;
+    if (this.muted) this.youtubeProvider.mute();
+    else this.youtubeProvider.unmute();
   }
 
   renderTrack = () => {
@@ -243,10 +253,12 @@ export class GamePage {
       this.trackLeft -= velocity;
       requestAnimationFrame(this.renderTrack);
       velocity /= 1.25;
-      if (Math.abs(velocity) < 1) clearInterval(interval);
+      if (Math.abs(velocity) < 1) {
+        clearInterval(interval);
+        if (this.commitSeekTimeout) clearTimeout(this.commitSeekTimeout);
+        this.commitSeekTimeout = setTimeout(this.commitSeek, 1500);
+      }
     }, 16.66);
-    if (this.commitSeekTimeout) clearTimeout(this.commitSeekTimeout);
-    this.commitSeekTimeout = setTimeout(this.commitSeek, 1500);
   }
 
   ngAfterViewInit() {
