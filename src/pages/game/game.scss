@@ -1,3 +1,5 @@
+$purple: #D056DB;
+
 page-game {
     ion-content {
         background: linear-gradient(to bottom, map-get($colors, primary) 0%, darken(map-get($colors, primary), 20%) 100%);
@@ -8,7 +10,6 @@ page-game {
     ion-card{
         text-align: center;
         font-family: 'lato';
-        height: 40%;
     }
     .song-info {
         position: relative;
@@ -27,41 +28,39 @@ page-game {
             color: #FFF;
         }
     }
-    .leader-board{
-        ion-card-header{
-            height: 1%;
-            
-        background-color:#D056DB !important;
-        p{
-            font-family: 'lato';
-            
-        font-weight: 300;
-        font-size: 18px;
-            margin: auto;
-            color: #FFF;
-        }
-        }
-        ion-list{
-            ion-item{
-                background-color: #D056DB !important;
-                color: #FFF;
-                font-family: 'lato';
-                font-weight: 300;
-                border-top: 0.5px solid #FFF;
+    .top-container{ 
+        display:flex;
+        .leader-board{
+            flex: 1 0 50%;
+
+            ion-card{
+                background-color: #FFF;
+            }
+            ion-card-header{                
+                p{
+                    font-family: 'lato'; 
+                    font-weight: 300;
+                    font-size: 18px;
+                    margin: auto;
+                    color:$purple;
+                }
+            }
+            ion-list{
+                ion-item{
+                    background:#FFF;
+                    color:$purple;
+                    font-family: 'lato';
+                    font-weight: 300;
+                    border-top: 0.5px solid $purple;
+                }
             }
         }
-        float: left;
-        width: 50%;
-        height: 50%; 
-        span {
-            float: right;
+        .waveform {
+            height: 210px;
+            color: white;
+            flex: 1 0 50%;
+            border: 1px solid $purple;
         }
-    }
-    .waveform {
-        color: white;
-        width: 50%;
-        height: 40vh;
-        float: right;
     }
     .opponent-lyrics{
         color: white;

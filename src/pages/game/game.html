@@ -1,3 +1,4 @@
+
 <ion-header no-border>
     <ion-navbar color="dark" transparent>
         <ion-title>{{session !== null ? session.name : 'Loading...'}}</ion-title>
@@ -14,13 +15,16 @@
         <div class="song-info-content">
             <strong>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.title : 'Nothing Playing'}}</strong>
             <br/>{{playingInfo !== null && playingInfo !== undefined ? playingInfo.artist : 'Start the party!'}}
+            <br/>
+            <br/>{{playingInfo !== null && playingInfo !== undefined ? oldBpm +'bpm' : 'BPM'}}
+
         </div>
     </div>
     <div class="top-container">
         <div class="leader-board">
             <ion-card>
                 <ion-card-header>
-                  <p>Leader Board</p>  
+                  <p><strong>Leader Board</strong></p>  
                 </ion-card-header>
                 <ion-list>
                     <ion-item>
@@ -44,7 +48,7 @@
     </div>
 
     <div class="opponent-lyrics">
-      <p>current lyrics</p>  
+      <p>current lyrics</p>
     </div>
 
     <ion-card class="player-container">
