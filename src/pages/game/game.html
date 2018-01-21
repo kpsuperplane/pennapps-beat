@@ -30,17 +30,18 @@
                 <ion-list>
                     <ion-item>
                         <ion-icon name="cart"></ion-icon>
-                        {{playing !== null && playing !== undefined ? playing.userId : "what the fuck is happening now?"}}
+                        P1
+                        <span>Score: {{users !== null ? users[user].userPoints : 0}}</span>
                     </ion-item>
                     <ion-item>
                         <ion-icon name="medical"></ion-icon>
-                        Player 2
-                        <span>Score 2</span>
+                        P2
+                        <span>{{score1}} </span>
                     </ion-item>
                     <ion-item>
                         <ion-icon name="cafe"></ion-icon>
-                        Player 3
-                        <span>Score 3</span>
+                        P3
+                        <span>Score: </span>
                     </ion-item>
                 </ion-list>
             </ion-card>

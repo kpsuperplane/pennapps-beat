@@ -35,6 +35,8 @@ export class GamePage {
   
   oldBpm: number = 0;
   newBpm: number = 0;
+  score1: number = 0;
+  difference: number = 0;
 
   loadingTrack: boolean = false;
 
@@ -47,6 +49,7 @@ export class GamePage {
   playingInfo: any | null = null;
   secondWidth = 30;
   songs: {title: string, artist: string}[] = [];
+  users: any[] = null;
   session: {
     name: string;
     users: {[key: string]: any}[];
@@ -55,6 +58,7 @@ export class GamePage {
     id: string,
     seconds: number, 
     userId: string,
+    userPoints: number,
     timestamp: number,
     key: string,
     internal_id: number
@@ -65,12 +69,20 @@ export class GamePage {
 
   time: number = 0;
 
+  globalInterval = 0;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider: FirebaseProvider, public modalCtrl: ModalController, public loadingCtrl: LoadingController, public youtubeProvider: YoutubeProvider) {
     this.navCtrl.swipeBackEnabled = false;
     this.user = this.navParams.get('user');
     this.sessionId = this.navParams.get('sessionId');
     this.playingInfo = null;
+    this.globalInterval = setInterval(()=>{
+      if (this.playing && this.playing.userId == this.user) {
+        this.users[this.user].userPoints += 5;
+        this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({userPoints: this.users[this.user].userPoints});
+      }
+    }, 1000);
     this.firebaseProvider.getSession(this.sessionId).child('playing').on('value', (snapshot) => {
       this.playing = snapshot.val();
       if (this.playing !== null) {
@@ -103,8 +115,9 @@ export class GamePage {
             this.renderTrack();
           }, 16.66);*/
           this.visualize();
-          this.oldBpm = data.analysis.track.tempo;
+          this.oldBpm = this.newBpm;
           this.newBpm = data.analysis.track.tempo;
+          this.updateScore();
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
@@ -112,6 +125,7 @@ export class GamePage {
     this.firebaseProvider.getSession(this.sessionId).child('users').on('value', (snapshot) => {
       const data = snapshot.val();
       const keys = Object.keys(data);
+      this.users = data;
       for(const key of keys) {
         this.youtubeProvider.cue(key, data[key].id, data[key].key, data[key].start);
       }
@@ -129,6 +143,23 @@ export class GamePage {
 
   }
 
+  updateScore(){
+    this.difference = this.newBpm - this.oldBpm;
+     if (this.difference >0){
+      if (40>this.difference){
+        this.score1 += (40-this.difference)*10;
+      } else{
+        this.score1 += 0;
+      }
+    } else {
+      this.difference = -this.difference;
+      if (40>this.difference){
+        this.score1 += (40-this.difference)*10;
+      } else{
+        this.score1 += 0;
+      }
+    } 
+  }
   mute() {
     this.muted = !this.muted;
     if (this.muted) this.youtubeProvider.mute();
@@ -232,7 +263,7 @@ export class GamePage {
           this.youtubeProvider.search(this.result.title + ' ' + this.result.artist).then(({data}) => {
             this.cuedId = data.items[0].id.videoId;
             this.queuedKey = this.cuedId + this.user + new Date().getTime();
-            this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).set({id: this.cuedId, key: this.queuedKey, start: 0});
+            this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({id: this.cuedId, key: this.queuedKey, start: 0});
           });
           const words = [];
           const pseudoCanvas = document.createElement("canvas");
@@ -285,7 +316,6 @@ export class GamePage {
   submit() {
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
     this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
-      this.playing.userId = this.user;
       this.queuedKey = newKey;
       this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({key: newKey});
     });
