@@ -28,7 +28,6 @@ export class YoutubeProvider {
   syncDaemon = () => {
     if (this.currentlyPlaying !== null && typeof this.currentlyPlaying.getCurrentTime === 'function') {
       const diff = ((new Date().getTime() - this.start) - this.currentlyPlaying.getCurrentTime() * 1000);
-      console.log(diff);
       if (diff > 50) this.currentlyPlaying.seekTo(this.currentlyPlaying.getCurrentTime() + diff/1300 + 0.1);
       else if (diff < -50) this.currentlyPlaying.seekTo(this.currentlyPlaying.getCurrentTime() + (diff/1300));
     }

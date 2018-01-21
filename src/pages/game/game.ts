@@ -13,9 +13,13 @@ import { YoutubeProvider } from '../../providers/youtube/youtube';
 })
 
 export class GamePage {
+  lyricLyrics: any[];
+  lyricCtx: any;
+  canvasRect: any;
   ctx: any;
 
   @ViewChild('track') track: ElementRef;
+  @ViewChild('lyrics') lyrics: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
   trackCanvas = null;
   trackLeft: number = null;
@@ -23,13 +27,15 @@ export class GamePage {
   trackTouchTime = -1;
   trackLyrics = [];
   trackTouchVelocity = 0;
-  trackFont="15px Lato";
+  trackFont="1.5rem Lato";
   trackTime: number = 0;
   cuedId: string = "";
   muted: boolean = true;
   queuedKey: string = "";
   
-  oldBpm: number=0;
+  oldBpm: number = 0;
+  newBpm: number = 0;
+  score1: number = 0;
 
   loadingTrack: boolean = false;
 
@@ -39,7 +45,7 @@ export class GamePage {
   sessionId: string = null;
   sessionName: string = null;
   result = null;
-  playingInfo: {} | null = null;
+  playingInfo: any | null = null;
   secondWidth = 30;
   songs: {title: string, artist: string}[] = [];
   session: {
@@ -72,7 +78,36 @@ export class GamePage {
       if (this.playing !== null) {
         axios.get('/music/id/' + this.playing.internal_id).then(({data}) => {
           this.playingInfo = data;
+          const words = [];
+          const pseudoCanvas = document.createElement("canvas");
+          const context = pseudoCanvas.getContext("2d");
+          context.font = this.trackFont;
+          for (let {timestamp, lyric} of data.lyrics) {
+            if (lyric[0] !== '<') words.push([timestamp, context.measureText(lyric).width + 5, lyric]);
+            let left = 0;
+            while (lyric[0] === '<') {
+              const endIndex = lyric.indexOf('>');
+              const time = left + timestamp;
+              left += parseInt(lyric.substring(1, endIndex));
+              lyric = lyric.substring(endIndex + 1);
+              let end = lyric.indexOf('<');
+              if (end === -1) end = lyric.length;
+              const text = lyric.substring(0, end);
+              words.push([time, context.measureText(text).width + 5, text]);
+              lyric = lyric.substring(end);
+            };
+          }
+          this.lyricLyrics = words;
+          /*
+          const curTime = new Date().getTime();
+          setInterval(() => {
+            this.trackLeft = ((new Date().getTime() - curTime)/1000) * this.secondWidth - (this.track.nativeElement.getBoundingClientRect().width/2);
+            this.renderTrack();
+          }, 16.66);*/
+          this.visualize();
           this.oldBpm = data.analysis.track.tempo;
+          this.newBpm = data.analysis.track.tempo;
+          this.updateScore();
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
@@ -97,6 +132,9 @@ export class GamePage {
 
   }
 
+  updateScore(){
+    this.score1 = (40 - (this.newBpm-this.oldBpm))*10;
+  }
   mute() {
     this.muted = !this.muted;
     if (this.muted) this.youtubeProvider.mute();
@@ -244,7 +282,7 @@ export class GamePage {
     const now = new Date().getTime();
     this.trackTouchVelocity = (e.touches[0].screenX - this.trackTouchPosition)/Math.max(1, (now - this.trackTouchTime)/1000);
     this.trackLeft -= e.touches[0].screenX - this.trackTouchPosition;
-    this.trackTouchPosition = e.touches[0].screenX; 
+    this.trackTouchPosition = e.touches[0].screenX;
     this.trackTouchTime = now;
     requestAnimationFrame(this.renderTrack);
   }
@@ -279,15 +317,29 @@ export class GamePage {
 
   ngAfterViewInit() {
     this.trackCanvas = this.track.nativeElement.getContext('2d');
-    if (window.devicePixelRatio > 1) {
-      const { width, height } = this.track.nativeElement.getBoundingClientRect();
-      this.track.nativeElement.setAttribute('width', width * 2);
-      this.track.nativeElement.setAttribute('height', height * 2);
-      this.trackCanvas.width = width * window.devicePixelRatio;
-      this.trackCanvas.height = height * window.devicePixelRatio;
-      this.track.nativeElement.style.width = width + 'px';
-      this.track.nativeElement.style.height = height + 'px';
-      this.trackCanvas.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.lyricCtx = this.lyrics.nativeElement.getContext('2d');
+    const deviceRatio = window.devicePixelRatio;
+    if (deviceRatio > 1) {
+      {
+        const { width, height } = this.track.nativeElement.getBoundingClientRect();
+        this.track.nativeElement.setAttribute('width', width * deviceRatio);
+        this.track.nativeElement.setAttribute('height', height * deviceRatio);
+        this.trackCanvas.width = width * deviceRatio;
+        this.trackCanvas.height = height * deviceRatio;
+        this.track.nativeElement.style.width = width + 'px';
+        this.track.nativeElement.style.height = height + 'px';
+        this.trackCanvas.scale(deviceRatio, deviceRatio);
+      }
+      {
+        let { width, height } = this.lyrics.nativeElement.getBoundingClientRect();
+        this.lyrics.nativeElement.setAttribute('width', width * deviceRatio);
+        this.lyrics.nativeElement.setAttribute('height', height * deviceRatio);
+        this.lyricCtx.width = width * deviceRatio;
+        this.lyricCtx.height = height * deviceRatio;
+        this.lyrics.nativeElement.style.width = width + 'px';
+        this.lyrics.nativeElement.style.height = height + 'px';
+        this.lyricCtx.scale(deviceRatio, deviceRatio);
+      }
     }
     this.track.nativeElement.addEventListener('touchstart', this.trackTouchStart);
     this.track.nativeElement.addEventListener('touchmove', this.trackTouchMove);
@@ -307,27 +359,200 @@ export class GamePage {
       }, 200);
   }
 
-  renderFrame = () => {
-    const x = 0;
-    const { width, height } = this.canvas.nativeElement.getBoundingClientRect();
-    this.ctx.fillStyle = "#000";
-    this.ctx.clearRect(0, 0, width, height);
-    //console.log(this.playingInfo);
-    /*for (var i = 0; i < 1000; i++) {
-      const barHeight = dataArray[i];
-      this.ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight+100);
-      x += barWidth + 10;
-    }*/
+  visualize = () => {
+    this.ctx.strokeStyle = "#FFFFFFAA";
+    const widthTime = 250;
+    let segmentIndex = 0;
+
+    const current = this.playingInfo._id;
+
+    function drawLines(ctx, pts) {
+      ctx.moveTo(pts[0], pts[1]);
+      for(let i = 2; i < pts.length - 1; i += 2) ctx.lineTo(pts[i], pts[i+1]);
+    }
+
+    function drawCurve(ctx, ptsa, tension = 0.5, isClosed = false, numOfSegments = 16, showPoints = false) {
+
+      ctx.beginPath();
+
+      drawLines(ctx, getCurvePoints(ptsa, tension, isClosed, numOfSegments));
+      
+      if (showPoints) {
+        ctx.beginPath();
+        for(var i=0;i<ptsa.length-1;i+=2) 
+          ctx.rect(ptsa[i] - 2, ptsa[i+1] - 2, 4, 4);
+      }
+
+      ctx.stroke();
+    }
+
+
+    function getCurvePoints(pts, tension, isClosed, numOfSegments) {
+
+      // use input value if provided, or use a default value	 
+      tension = (typeof tension != 'undefined') ? tension : 0.5;
+      isClosed = isClosed ? isClosed : false;
+      numOfSegments = numOfSegments ? numOfSegments : 16;
+
+      var _pts = [], res = [],	// clone array
+          x, y,			// our x,y coords
+          t1x, t2x, t1y, t2y,	// tension vectors
+          c1, c2, c3, c4,		// cardinal points
+          st, t, i;		// steps based on num. of segments
+
+      // clone array so we don't change the original
+      //
+      _pts = pts.slice(0);
+
+      // The algorithm require a previous and next point to the actual point array.
+      // Check if we will draw closed or open curve.
+      // If closed, copy end points to beginning and first points to end
+      // If open, duplicate first points to befinning, end points to end
+      if (isClosed) {
+        _pts.unshift(pts[pts.length - 1]);
+        _pts.unshift(pts[pts.length - 2]);
+        _pts.unshift(pts[pts.length - 1]);
+        _pts.unshift(pts[pts.length - 2]);
+        _pts.push(pts[0]);
+        _pts.push(pts[1]);
+      }
+      else {
+        _pts.unshift(pts[1]);	//copy 1. point and insert at beginning
+        _pts.unshift(pts[0]);
+        _pts.push(pts[pts.length - 2]);	//copy last point and append
+        _pts.push(pts[pts.length - 1]);
+      }
+
+      // ok, lets start..
+
+      // 1. loop goes through point array
+      // 2. loop goes through each segment between the 2 pts + 1e point before and after
+      for (i=2; i < (_pts.length - 4); i+=2) {
+        for (t=0; t <= numOfSegments; t++) {
+
+          // calc tension vectors
+          t1x = (_pts[i+2] - _pts[i-2]) * tension;
+          t2x = (_pts[i+4] - _pts[i]) * tension;
+
+          t1y = (_pts[i+3] - _pts[i-1]) * tension;
+          t2y = (_pts[i+5] - _pts[i+1]) * tension;
+
+          // calc step
+          st = t / numOfSegments;
+
+          // calc cardinals
+          c1 =   2 * Math.pow(st, 3) 	- 3 * Math.pow(st, 2) + 1; 
+          c2 = -(2 * Math.pow(st, 3)) + 3 * Math.pow(st, 2); 
+          c3 = 	   Math.pow(st, 3)	- 2 * Math.pow(st, 2) + st; 
+          c4 = 	   Math.pow(st, 3)	- 	  Math.pow(st, 2);
+
+          // calc x and y cords with common control vectors
+          x = c1 * _pts[i]	+ c2 * _pts[i+2] + c3 * t1x + c4 * t2x;
+          y = c1 * _pts[i+1]	+ c2 * _pts[i+3] + c3 * t1y + c4 * t2y;
+
+          //store points in array
+          res.push(x);
+          res.push(y);
+
+        }
+      }
+
+      return res;
+    }
+    let interval;
+    const { width, height } = this.lyrics.nativeElement.getBoundingClientRect();
+    const renderFrame = () => {
+      if (this.playingInfo._id !== current) {
+        clearInterval(interval);
+        return;
+      }
+      this.ctx.clearRect(0, 0, this.canvasRect.width, this.canvasRect.height);
+      const time = this.playing.seconds * 1000 + (new Date().getTime() - this.playing.timestamp);
+      while (segmentIndex < this.playingInfo.analysis.segments.length && this.playingInfo.analysis.segments[segmentIndex].start < time/1000) ++segmentIndex;
+      this.ctx.stroke();
+      this.ctx.beginPath();
+      const points = [];
+      const addPoint = (i) => {
+        if (i < 0) return;
+        const segmentPercentLocation = (1-(time - this.playingInfo.analysis.segments[i].start * 1000)/widthTime);
+        const volume = Math.max(0, Math.min(1, ((this.playingInfo.analysis.segments[i].loudness_start + this.playingInfo.analysis.segments[i].loudness_max)/2 + this.playingInfo.analysis.segments[i].loudness_max_time + 40)/40));
+        const x = this.canvasRect.width * segmentPercentLocation;
+        const y = this.canvasRect.height - (this.canvasRect.height * volume);
+        points.push(x);
+        points.push(y);
+      }
+      let i;
+      for (i = segmentIndex; i >= 0 && (time - this.playingInfo.analysis.segments[i].start * 1000) < widthTime; --i) addPoint(i);
+      for (let j = 0; j < 5; j++) addPoint(i - j);
+      drawCurve(this.ctx, points);
+      const lyricLeft = (time/1000) * this.secondWidth - (width/2);
+      this.lyricCtx.clearRect(0, 0, width, height);
+      this.lyricCtx.beginPath();
+      this.lyricCtx.lineWidth = 1;
+      this.lyricCtx.strokeStyle = '#FFFFFF66';
+      this.lyricCtx.fillStyle = '#FFFFFF66';
+      for (const bar of this.playingInfo.analysis.bars) {
+        const left = bar.start * this.secondWidth - lyricLeft;
+        if (left < 0) continue;
+        if (left > width) break;
+        this.lyricCtx.moveTo(left, 45);
+        this.lyricCtx.lineTo(left, height - 35);
+        this.lyricCtx.stroke();
+      }
+      for (const beat of this.playingInfo.analysis.beats) {
+        const left = beat.start * this.secondWidth - lyricLeft;
+        if (left < 0) continue;
+        if (left > width) break;
+        this.lyricCtx.beginPath();
+        this.lyricCtx.arc(left, 45 + (((height - 35) - 45)/2), 3, 0, 2 * Math.PI);
+        this.lyricCtx.fill();
+      }
+      this.lyricCtx.fillStyle = '#FFFFFFFF';
+      this.lyricCtx.font=this.trackFont;
+      const now = ((lyricLeft + width/2)/this.secondWidth) * 1000;
+      const lyricIndex = Math.max(0, this.lyricLyrics.findIndex(lyric => lyric[0] > now) - 1);
+      const lyric = this.lyricLyrics[lyricIndex];
+      const percentIn = (now - lyric[0]) / (this.lyricLyrics[lyricIndex + 1][0] - lyric[0]);
+      const leftCorner = (width / 2) - lyric[1] * percentIn;
+      //const leftCorner = (lyric[0]/1000 * this.secondWidth) - this.trackLeft + width/2 - lyric[1] * percentIn;
+      this.lyricCtx.beginPath();
+      this.lyricCtx.fillText(lyric[2], leftCorner, 20);
+      this.lyricCtx.beginPath();
+      this.lyricCtx.fillStyle = '#FFFFFFAA';
+      let left = leftCorner;
+      for (let index = lyricIndex - 1; index >= 0; index--) {
+        const prevLyric = this.lyricLyrics[index];
+        this.lyricCtx.fillText(prevLyric[2], left - prevLyric[1], 20);
+        left -= prevLyric[1];
+        if (left < 0) break;
+      }
+      left = leftCorner + lyric[1];
+      for (let index = lyricIndex + 1; index < this.lyricLyrics.length; index++) {
+        const nextLyric = this.lyricLyrics[index];
+        this.lyricCtx.fillText(nextLyric[2], left, 20);
+        left += nextLyric[1];
+        if (left >= width) break;
+      }
+
+    }
+    interval = setInterval(renderFrame, 16.66);
   }
 
-  
+
   ionViewDidLoad() {
     var canvas = this.canvas.nativeElement;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    this.canvasRect = this.canvas.nativeElement.getBoundingClientRect();
+    const { width, height } = this.canvasRect;
+    canvas.width = width;
+    canvas.height = height;
+    const deviceRatio = window.devicePixelRatio;
     this.ctx = canvas.getContext("2d");
-    setInterval(() => {
-      requestAnimationFrame(this.renderFrame)
-    }, 16.66);
+    this.canvas.nativeElement.setAttribute('width', width * 2);
+    this.canvas.nativeElement.setAttribute('height', height * 2);
+    this.ctx.width = width * deviceRatio;
+    this.ctx.height = height * deviceRatio;
+    this.canvas.nativeElement.style.width = width + 'px';
+    this.canvas.nativeElement.style.height = height + 'px';
+    this.ctx.scale(deviceRatio, deviceRatio);
   }
 }

@@ -14,6 +14,7 @@ import { AlertController } from 'ionic-angular/components/alert/alert-controller
 })
 export class HomePage {
   
+  @ViewChild('userInput') userInput;
   @ViewChild(Content) content: Content;
 
   /*@ViewChild('visualizer')
@@ -42,14 +43,17 @@ export class HomePage {
       this.opened=true;
     }
     setTimeout(() => {
+      if (this.opened) this.userInput.setFocus();
       this.content.resize();
     }, 50);
   }
 
   createSession() {
-      this.firebaseProvider.createSession(this.sessionName).then((data) => {
-        this.navCtrl.push(GamePage, data);
-      });
+    this.firebaseProvider.createSession(this.sessionName).then((data) => {
+      this.sessionName = "";
+      this.state();
+      this.navCtrl.push(GamePage, data);
+    });
   }
   
 
