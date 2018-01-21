@@ -65,13 +65,13 @@ export class YoutubeProvider {
           if (this.players[key] === undefined) return;
           if (this.players[key].seekTo) {
             clearInterval(interval);
-            this.players[key].seekTo(start/1000 + 0.735, true);
+            this.players[key].seekTo(start + 0.735, true);
             this.players[key].pauseVideo();
 
           }
         }, 50);
       } else {
-        this.players[key].seekTo(start/1000 + 0.35, true);
+        this.players[key].seekTo(start + 0.35, true);
         this.players[key].pauseVideo();
       }
     }
@@ -120,15 +120,15 @@ export class YoutubeProvider {
         if (this.currentlyPlaying === undefined) return;
         if (typeof this.currentlyPlaying.playVideo === 'function') {
           clearInterval(interval);
-          this.currentlyPlaying.seekTo(start/1000 + 0.35, true);
+          this.currentlyPlaying.seekTo(start + 0.35, true);
           this.currentlyPlaying.playVideo();
         }
       }, 50);
     } else {
-      this.currentlyPlaying.seekTo(start/1000 + 0.35, true);
+      this.currentlyPlaying.seekTo(start + 0.35, true);
       this.currentlyPlaying.playVideo();
     }
-    this.start = timestamp - start;
+    this.start = timestamp - start * 1000;
 
     delete this.players[key];
   }

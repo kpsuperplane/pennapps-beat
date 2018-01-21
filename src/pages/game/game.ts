@@ -314,7 +314,7 @@ export class GamePage {
  
   submit() {
     const newKey = this.cuedId + '-' + this.user + new Date().getTime();
-    this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
+    this.firebaseProvider.getSession(this.sessionId).child('playing').set({id: this.cuedId, key: this.queuedKey, seconds: this.trackTime/1000, timestamp: new Date().getTime(), internal_id: this.result._id, userId: this.user}).then(() => {
       this.queuedKey = newKey;
       this.firebaseProvider.getSession(this.sessionId).child('users').child(this.user).update({key: newKey});
     });
