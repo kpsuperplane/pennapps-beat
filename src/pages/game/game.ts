@@ -33,7 +33,8 @@ export class GamePage {
   muted: boolean = true;
   queuedKey: string = "";
   
-  oldBpm: number=0;
+  oldBpm: number = 0;
+  newBpm: number = 0;
 
   loadingTrack: boolean = false;
 
@@ -103,6 +104,7 @@ export class GamePage {
           }, 16.66);*/
           this.visualize();
           this.oldBpm = data.analysis.track.tempo;
+          this.newBpm = data.analysis.track.tempo;
         });
         this.youtubeProvider.play(this.playing.userId, this.playing.id, this.playing.key, this.playing.seconds, this.playing.timestamp);
       }
@@ -355,7 +357,7 @@ export class GamePage {
     const widthTime = 250;
     let segmentIndex = 0;
 
-    const current = this.playingInfo.__id;
+    const current = this.playingInfo._id;
 
     function drawLines(ctx, pts) {
       ctx.moveTo(pts[0], pts[1]);
@@ -453,7 +455,7 @@ export class GamePage {
     let interval;
     const { width, height } = this.lyrics.nativeElement.getBoundingClientRect();
     const renderFrame = () => {
-      if (this.playingInfo._id != current) {
+      if (this.playingInfo._id !== current) {
         clearInterval(interval);
         return;
       }
