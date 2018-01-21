@@ -28,9 +28,34 @@ page-game {
         }
     }
     .leader-board{
+        ion-card-header{
+            height: 1%;
+            
+        background-color:#D056DB !important;
+        p{
+            font-family: 'lato';
+            
+        font-weight: 300;
+        font-size: 18px;
+            margin: auto;
+            color: #FFF;
+        }
+        }
+        ion-list{
+            ion-item{
+                background-color: #D056DB !important;
+                color: #FFF;
+                font-family: 'lato';
+                font-weight: 300;
+                border-top: 0.5px solid #FFF;
+            }
+        }
         float: left;
         width: 50%;
-        height: 72vh; 
+        height: 50%; 
+        span {
+            float: right;
+        }
     }
     .waveform {
         color: white;
@@ -44,9 +69,6 @@ page-game {
         height: 10%;
         font-size: 1.5rem;
         margin: 2% 0% 5% 0%;
-        border-style: solid;
-        border-color: white;
-        border-width: 2px;
     }
     
     .qr-code-container {
